@@ -2,7 +2,6 @@
 
 Sombra3d is a standalone browser-based 3D asset studio for importing, creating, styling, slicing, rendering, and exporting production-ready 3D assets.
 
-Created with [Omma](https://omma.build).
 
 ## What is included
 
