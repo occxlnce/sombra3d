@@ -1,7 +1,5 @@
 # Sombra3D
 
-Created with [Omma](https://omma.build)
-
 ## Setup
 
 Open `index.html` in your browser, or:
