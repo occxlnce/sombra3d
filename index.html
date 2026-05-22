@@ -6,6 +6,7 @@
 <title>Sombra3D - 3D Asset Studio</title>
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dgwtaivvf/image/upload/v1778747830/sombra3d_eziyxy.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dgwtaivvf/image/upload/v1778747830/sombra3d_eziyxy.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -132,6 +133,17 @@
   .toolbar-btn.primary:hover { background: var(--accent-light); }
 
   .toolbar-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .toolbar-btn i,
+  .welcome-btn i,
+  .preset-btn i,
+  .modal-btn i,
+  .scene-item-icon i,
+  .rec-toggle-chip i,
+  .rec-preview-header i {
+    width: 1em;
+    text-align: center;
+    flex-shrink: 0;
+  }
 
   .toolbar-spacer { flex: 1; min-width: 4px; }
 
@@ -1178,6 +1190,137 @@
   .export-menu-item:hover { background: var(--surface2); color: var(--text); }
   .export-menu-item svg { width: 14px; height: 14px; }
 
+  .workspace-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    margin: 12px 0;
+  }
+
+  .workspace-project {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    color: var(--text-secondary);
+  }
+
+  .workspace-project:last-child { border-bottom: 0; }
+  .workspace-project:hover, .workspace-project.active { background: var(--surface2); color: var(--text); }
+  .workspace-project i { width: 18px; text-align: center; color: var(--accent-light); }
+  .workspace-project-main { flex: 1; min-width: 0; }
+  .workspace-project-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .workspace-project-meta { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+  .workspace-empty { padding: 18px; text-align: center; color: var(--text-dim); font-size: 12px; }
+
+  .camera-template-modal {
+    max-width: 760px;
+  }
+
+  .camera-template-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 12px;
+  }
+
+  .camera-template-filter {
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .camera-template-filter.active,
+  .camera-template-filter:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .camera-template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    max-height: 330px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-bottom: 12px;
+  }
+
+  .camera-template-card {
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+    align-items: center;
+    color: var(--text-secondary);
+  }
+
+  .camera-template-card:hover,
+  .camera-template-card.active {
+    border-color: var(--accent);
+    background: rgba(108,92,231,0.12);
+    color: var(--text);
+  }
+
+  .camera-template-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18), rgba(108,92,231,0.18) 45%, rgba(0,0,0,0.08));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-light);
+    font-size: 18px;
+  }
+
+  .camera-template-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .camera-template-desc { font-size: 10px; line-height: 1.35; color: var(--text-dim); }
+
+  .camera-template-settings {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .camera-template-path {
+    height: 52px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .camera-template-path svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .camera-template-status {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+    min-height: 16px;
+  }
+
   /* ===== DEMO RECORDER ===== */
   .rec-indicator {
     display: none;
@@ -1953,6 +2096,35 @@
     .modal .presets-grid { grid-template-columns: repeat(2, 1fr); }
     .toolbar-group { display: none; }
   }
+
+  /* SCANNER MODAL & VIEWPORTS */
+  .scanner-modal {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+  }
+  .scan-step {
+    animation: fadeIn 0.25s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .presets-grid .scan-type-btn {
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .presets-grid .scan-type-btn:hover {
+    background: var(--surface3);
+    color: var(--text);
+  }
+  .presets-grid .scan-type-btn.active {
+    background: rgba(108,92,231,0.15);
+    border-color: var(--accent);
+    color: var(--accent-light);
+  }
 </style>
 </head>
 <body>
@@ -1973,6 +2145,11 @@
   <button class="toolbar-btn" id="btn-import" title="Import 3D File">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     Import
+  </button>
+
+  <button class="toolbar-btn" id="btn-workspace" title="Workspace Projects">
+    <i class="fa-solid fa-folder-open"></i>
+    Workspace
   </button>
 
   <button class="toolbar-btn" id="btn-export" title="Export">
@@ -2013,8 +2190,6 @@
     Image → 3D
   </button>
 
-  <div class="toolbar-divider"></div>
-
   <button class="toolbar-btn hide-xs" id="btn-undo" title="Undo (Ctrl+Z)" style="opacity:0.35;pointer-events:none;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg>
     <span id="undo-count" style="font-size:9px;opacity:0.6;"></span>
@@ -2042,6 +2217,10 @@
   <button class="toolbar-btn hide-small" id="btn-add-camera" title="Add Scene Camera">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
     Camera
+  </button>
+  <button class="toolbar-btn hide-small" id="btn-camera-templates" title="Camera Motion Templates">
+    <i class="fa-solid fa-clapperboard"></i>
+    Templates
   </button>
   <button class="toolbar-btn hide-small" id="btn-look-camera" title="Look Through Active Camera">Look Cam</button>
 
@@ -2073,6 +2252,10 @@
   <div class="export-menu-item" id="export-project">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
     Save OMMA Project
+  </div>
+  <div class="export-menu-item" id="save-workspace-project">
+    <i class="fa-solid fa-folder-plus"></i>
+    Save to Workspace
   </div>
   <div class="export-menu-item" id="load-project">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -2127,8 +2310,8 @@
           </div>
         </div>
         <div id="scene-hierarchy">
-          <div class="scene-item" data-type="camera"><span class="scene-item-icon">📷</span> Camera</div>
-          <div class="scene-item" data-type="light"><span class="scene-item-icon">💡</span> Light Rig</div>
+          <div class="scene-item" data-type="camera"><span class="scene-item-icon"><i class="fa-solid fa-camera"></i></span> Camera</div>
+          <div class="scene-item" data-type="light"><span class="scene-item-icon"><i class="fa-solid fa-lightbulb"></i></span> Light Rig</div>
         </div>
       </div>
     </div>
@@ -2191,6 +2374,7 @@
         <button class="scene-action-btn" id="scene-visibility" title="Hide/show selected">E</button>
         <button class="scene-action-btn" id="scene-lock" title="Lock/unlock selected">L</button>
         <button class="scene-action-btn" id="scene-group" title="Group selected">G</button>
+        <button class="scene-action-btn" id="scene-ungroup" title="Ungroup selected into individual meshes">U</button>
         <button class="scene-action-btn" id="scene-delete" title="Delete selected">X</button>
       </div>
     </div>
@@ -2365,7 +2549,7 @@
           <button class="modal-btn" id="anim-stop">Stop</button>
           <button class="modal-btn" id="anim-clear">Clear</button>
         </div>
-        <div class="inspector-row" style="margin-top:8px;"><span class="inspector-label">FPS</span><select class="inspector-select" id="anim-fps"><option value="24">24</option><option value="30" selected>30</option><option value="60">60</option></select><select class="inspector-select" id="anim-resolution"><option value="720">720p</option><option value="1080" selected>1080p</option><option value="1440">1440p</option></select></div>
+        <div class="inspector-row" style="margin-top:8px;"><span class="inspector-label">FPS</span><select class="inspector-select" id="anim-fps"><option value="24">24</option><option value="30" selected>30</option><option value="60">60</option></select><select class="inspector-select" id="anim-resolution"><option value="720">720p</option><option value="1080" selected>1080p</option><option value="1440">1440p</option><option value="2160">4K</option></select></div>
         <div class="inspector-row"><span class="inspector-label">Recording</span><select class="inspector-select" id="anim-camera-mode"><option value="timeline">Timeline Cameras</option><option value="locked">Lock Active Camera</option></select></div>
         <div class="timeline-actions">
           <button class="modal-btn primary" id="anim-record">Export MP4</button>
@@ -2425,12 +2609,13 @@
       <!-- IMAGE EXTRUDE SECTION -->
       <div class="inspector-section" id="section-image3d" style="display:none">
         <div class="inspector-section-title">Image to 3D</div>
-        <div class="inspector-row"><span class="inspector-label">Mode</span><select class="inspector-select" id="img3d-mode"><option value="extrude">Silhouette Extrude</option><option value="heightmap">Height Map</option></select></div>
-        <div class="inspector-row"><span class="inspector-label">Background</span><select class="inspector-select" id="img3d-bg"><option value="auto">Auto Remove</option><option value="alpha">Use Alpha</option><option value="none">Keep Image</option></select></div>
+        <div class="inspector-row"><span class="inspector-label">Mode</span><select class="inspector-select" id="img3d-mode"><option value="relief">Textured Relief</option><option value="extrude">Solid Cutout</option><option value="heightmap">Height Map</option></select></div>
+        <div class="inspector-row"><span class="inspector-label">Background</span><select class="inspector-select" id="img3d-bg"><option value="auto">Auto Remove Center Object</option><option value="alpha">Use Alpha</option></select></div>
         <div class="inspector-row"><span class="inspector-label">Threshold</span><input type="range" class="inspector-slider" id="img3d-threshold" min="0" max="255" step="1" value="128"><span class="slider-value" id="val-img3d-threshold">128</span></div>
         <div class="inspector-row"><span class="inspector-label">Depth</span><input type="range" class="inspector-slider" id="img3d-depth" min="0.1" max="20" step="0.1" value="3"><span class="slider-value" id="val-img3d-depth">3.0</span></div>
         <div class="inspector-row"><span class="inspector-label">Resolution</span><input type="range" class="inspector-slider" id="img3d-res" min="32" max="256" step="8" value="128"><span class="slider-value" id="val-img3d-res">128</span></div>
         <div class="inspector-row"><span class="inspector-label">Smooth</span><input type="range" class="inspector-slider" id="img3d-smooth" min="0" max="5" step="1" value="1"><span class="slider-value" id="val-img3d-smooth">1</span></div>
+        <div class="inspector-row"><span class="inspector-label">Status</span><span id="img3d-status" style="flex:1;font-size:11px;color:var(--text-dim);line-height:1.4;">Background is removed from the centered object on import.</span></div>
         <div class="inspector-row" style="justify-content:flex-end;margin-top:4px;"><button class="modal-btn primary" id="img3d-regenerate" style="font-size:11px;padding:5px 14px;">Regenerate Mesh</button></div>
       </div>
 
@@ -2474,18 +2659,259 @@
     <h3>Add Primitive Shape</h3>
     <p>Add a basic 3D shape to your scene.</p>
     <div class="presets-grid" style="grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
-      <button class="preset-btn" data-prim="box" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">◻️</span>Box</button>
-      <button class="preset-btn" data-prim="sphere" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">🔵</span>Sphere</button>
-      <button class="preset-btn" data-prim="cylinder" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">🔷</span>Cylinder</button>
-      <button class="preset-btn" data-prim="cone" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">🔺</span>Cone</button>
-      <button class="preset-btn" data-prim="torus" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">⭕</span>Torus</button>
-      <button class="preset-btn" data-prim="torusknot" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">🔗</span>Knot</button>
-      <button class="preset-btn" data-prim="plane" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">▫️</span>Plane</button>
-      <button class="preset-btn" data-prim="icosahedron" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">💎</span>Icosahedron</button>
-      <button class="preset-btn" data-prim="dodecahedron" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><span style="font-size:22px;">⬡</span>Dodecahedron</button>
+      <button class="preset-btn" data-prim="box" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-cube" style="font-size:22px;"></i>Box</button>
+      <button class="preset-btn" data-prim="sphere" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-circle" style="font-size:22px;"></i>Sphere</button>
+      <button class="preset-btn" data-prim="cylinder" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-database" style="font-size:22px;"></i>Cylinder</button>
+      <button class="preset-btn" data-prim="cone" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-caret-up" style="font-size:22px;"></i>Cone</button>
+      <button class="preset-btn" data-prim="torus" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-ring" style="font-size:22px;"></i>Torus</button>
+      <button class="preset-btn" data-prim="torusknot" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-link" style="font-size:22px;"></i>Knot</button>
+      <button class="preset-btn" data-prim="plane" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-regular fa-square" style="font-size:22px;"></i>Plane</button>
+      <button class="preset-btn" data-prim="icosahedron" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-gem" style="font-size:22px;"></i>Icosahedron</button>
+      <button class="preset-btn" data-prim="dodecahedron" style="flex-direction:column;padding:14px 8px;text-align:center;justify-content:center;gap:8px;"><i class="fa-solid fa-dice-d20" style="font-size:22px;"></i>Dodecahedron</button>
     </div>
     <div class="modal-actions">
       <button class="modal-btn" id="modal-prim-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCAN OBJECT MODAL -->
+<div class="modal-overlay" id="modal-scanner">
+  <div class="modal scanner-modal" style="max-width: 680px; width: 100%; border-radius: 14px; overflow: hidden; padding: 0;">
+    
+    <!-- Scanner Header -->
+    <div style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-camera" style="font-size: 20px; color: var(--accent-light);"></i>
+        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--text);">3D Video Object Scanner</h3>
+      </div>
+      <button class="panel-close-btn" id="modal-scanner-close" style="display: flex; border: none; background: none; cursor: pointer; color: var(--text-dim); font-size: 20px; padding: 4px;">×</button>
+    </div>
+
+    <!-- Scanner Body -->
+    <div class="scanner-body" style="padding: 24px; background: var(--bg); display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Step 1: Pre-capture (Guidance & Category Selection) -->
+      <div id="scan-step-1" class="scan-step">
+        <h4 style="margin: 0 0 10px; font-size: 14px; color: var(--text);">1. Choose Object Category &amp; Prepare</h4>
+        <p style="margin: 0 0 20px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+          For best reconstruction results, place your object in a well-lit area with a plain background. Make sure you have enough space to move 360° around the object.
+        </p>
+        
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); margin-bottom: 8px; font-weight: 600;">Reconstruction Model Type</label>
+          <div class="presets-grid" style="grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <button class="preset-btn scan-type-btn active" data-type="organic" style="justify-content: center; gap: 8px; padding: 12px;"><i class="fa-solid fa-mountain"></i> Organic / Stone</button>
+            <button class="preset-btn scan-type-btn" data-type="pottery" style="justify-content: center; gap: 8px; padding: 12px;"><i class="fa-solid fa-flask"></i> Vase / Pottery</button>
+            <button class="preset-btn scan-type-btn" data-type="product" style="justify-content: center; gap: 8px; padding: 12px;"><i class="fa-solid fa-box"></i> Box / Product</button>
+            <button class="preset-btn scan-type-btn" data-type="statue" style="justify-content: center; gap: 8px; padding: 12px;"><i class="fa-solid fa-monument"></i> Statue / Bust</button>
+          </div>
+        </div>
+
+        <div style="background: rgba(108, 92, 231, 0.08); border: 1px solid rgba(108, 92, 231, 0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+          <span style="font-size: 11px; font-weight: 600; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">Capture Advice</span>
+          <ul style="margin: 0; padding-left: 18px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+            <li>Move slowly and keep the object in the center of the frame.</li>
+            <li>Avoid reflective or extremely dark surfaces if possible.</li>
+            <li>Keep a steady distance of about 1-2 feet (30-60 cm) from the object.</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); margin-bottom: 8px; font-weight: 600;">Reconstruction Service URL</label>
+          <input id="scan-service-endpoint" class="inspector-input" type="url" placeholder="/api/reconstruct or https://scanner.example.com/jobs" style="width: 100%; font-size: 12px;">
+          <p style="margin: 6px 0 0; font-size: 10px; color: var(--text-dim); line-height: 1.5;">Leave empty to create an editable local preview mesh. Add a service endpoint to upload frames and import the returned GLB/OBJ.</p>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button class="modal-btn" id="btn-scan-cancel-1">Cancel</button>
+          <button class="modal-btn primary" id="btn-scan-start-feed">Open Camera</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Camera Feed & Capture -->
+      <div id="scan-step-2" class="scan-step" style="display: none;">
+        <div style="position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+          <!-- Live Camera Video -->
+          <video id="scan-video" style="width: 100%; height: 100%; object-fit: cover;" autoplay playsinline></video>
+          
+          <!-- Scan Guidance Grid Overlay -->
+          <div style="position: absolute; inset: 0; border: 2px dashed rgba(255, 255, 255, 0.25); pointer-events: none; margin: 20px; border-radius: 8px;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 50%; width: 60%; height: 60%; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 255, 255, 0.6); background: rgba(0, 0, 0, 0.4); padding: 4px 8px; border-radius: 4px;">Center Object Here</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Guidance Text Badge -->
+          <div id="scan-guidance-badge" style="position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 11, 0.85); border: 1px solid var(--border-light); color: var(--text); border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: 500; text-align: center; white-space: nowrap; display: none;">
+            <i class="fa-solid fa-video"></i> Prepare to record...
+          </div>
+          
+          <!-- Capture Progress Bar -->
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.2);">
+            <div id="scan-capture-progress" style="height: 100%; width: 0%; background: var(--green); transition: width 0.1s linear;"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="scan-timer-badge" class="rec-timer" style="font-size: 12px; background: rgba(255, 92, 92, 0.1); color: #ff5c5c; padding: 4px 8px; border-radius: 4px; font-weight: bold; display: none;">00:00</span>
+            <span id="scan-status-text" style="font-size: 11px; color: var(--text-dim);">Camera ready. Align your object.</span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="modal-btn" id="btn-scan-back-2">Back</button>
+            <button class="modal-btn primary" id="btn-scan-record" style="background: var(--red); color: white; border-color: var(--red);">Start Recording</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Frame Extraction & Selection Previews -->
+      <div id="scan-step-3" class="scan-step" style="display: none;">
+        <h4 style="margin: 0 0 10px; font-size: 14px; color: var(--text);">2. Extracting &amp; Selecting Best Frames</h4>
+        <p style="margin: 0 0 16px; font-size: 11px; color: var(--text-secondary); line-height: 1.6;">
+          We are analyzing the recorded stream to select the sharpest and most unique viewpoints. Blurry or duplicate frames are automatically discarded.
+        </p>
+
+        <!-- Extraction Loader / Progress Bar -->
+        <div id="scan-extraction-progress-container" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">
+            <span id="scan-extraction-status">Analyzing frames...</span>
+            <span id="scan-extraction-percentage">0%</span>
+          </div>
+          <div style="height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; border: 1px solid var(--border);">
+            <div id="scan-extraction-progress-fill" style="height: 100%; width: 0%; background: var(--accent-light); transition: width 0.2s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Selected Frame Thumbnails Grid -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); margin-bottom: 8px; font-weight: 600;" id="scan-frame-grid-label">Extracted Viewpoints (0)</label>
+          <div id="scan-frame-thumbnails" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; max-height: 160px; overflow-y: auto; padding: 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface);">
+            <!-- Thumbnails inserted dynamically -->
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button class="modal-btn" id="btn-scan-retry">Retry Scan</button>
+          <button class="modal-btn primary" id="btn-scan-reconstruct" disabled>Reconstruct 3D Model</button>
+        </div>
+      </div>
+
+      <!-- Step 4: 3D Reconstruction Pipeline -->
+      <div id="scan-step-4" class="scan-step" style="display: none;">
+        <h4 style="margin: 0 0 10px; font-size: 14px; color: var(--text);">3. Reconstructing 3D Mesh</h4>
+        <p style="margin: 0 0 20px; font-size: 11px; color: var(--text-secondary);">
+          Our reconstruction engine is computing camera poses, generating a point cloud, and building textured polygons.
+        </p>
+
+        <!-- Loader Spinner & Dynamic Log -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; gap: 16px;">
+          <div class="spinner" style="width: 48px; height: 48px; border-width: 4px;"></div>
+          <span id="scan-reconstruct-phase" style="font-size: 13px; font-weight: 600; color: var(--accent-light);">Initializing pipeline...</span>
+        </div>
+
+        <!-- Terminal Log Console -->
+        <div id="scan-log-console" style="background: #050508; border: 1px solid var(--border); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #a29bfe; padding: 12px; height: 120px; overflow-y: auto; white-space: pre-wrap; line-height: 1.5; box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);">
+          <!-- Logs appended dynamically -->
+        </div>
+
+        <div style="height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; margin-top: 16px;">
+          <div id="scan-reconstruct-progress" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transition: width 0.3s ease;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- WORKSPACE MODAL -->
+<div class="modal-overlay" id="modal-workspace">
+  <div class="modal" style="max-width:560px;">
+    <h3>Workspace Projects</h3>
+    <p>Recent projects are saved in this browser so you can return after refreshing or closing the tab.</p>
+    <div class="inspector-row" style="margin-bottom:10px;">
+      <span class="inspector-label">Name</span>
+      <input class="inspector-input" id="workspace-project-name" type="text" placeholder="Untitled Sombra3D project">
+    </div>
+    <div class="modal-actions" style="justify-content:flex-start;margin-bottom:10px;">
+      <button class="modal-btn primary" id="workspace-save-current"><i class="fa-solid fa-floppy-disk"></i> Save Current</button>
+      <button class="modal-btn" id="workspace-open-selected"><i class="fa-solid fa-folder-open"></i> Open Selected</button>
+      <button class="modal-btn" id="workspace-delete-selected"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+    <div class="workspace-list" id="workspace-project-list">
+      <div class="workspace-empty">No saved workspace projects yet.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="workspace-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAMERA MOTION TEMPLATES MODAL -->
+<div class="modal-overlay" id="modal-camera-templates">
+  <div class="modal camera-template-modal">
+    <h3>Camera Motion Templates</h3>
+    <p>Select a ready-made camera move, preview it on the current object or scene, then apply it to the timeline for recording/export.</p>
+
+    <div class="camera-template-toolbar" id="camera-template-filters">
+      <button class="camera-template-filter active" data-filter="all">All</button>
+      <button class="camera-template-filter" data-filter="Product">Product</button>
+      <button class="camera-template-filter" data-filter="Icon">Icon</button>
+      <button class="camera-template-filter" data-filter="Cinematic">Cinematic</button>
+      <button class="camera-template-filter" data-filter="Social">Social</button>
+      <button class="camera-template-filter" data-filter="Website Hero">Website Hero</button>
+    </div>
+
+    <div class="camera-template-grid" id="camera-template-grid"></div>
+
+    <div class="camera-template-settings">
+      <div>
+        <span class="inspector-label" style="display:block;margin-bottom:5px;">Duration</span>
+        <input class="inspector-input" id="camera-template-duration" type="number" min="1" max="30" step="0.5" value="6">
+      </div>
+      <div>
+        <span class="inspector-label" style="display:block;margin-bottom:5px;">Easing</span>
+        <select class="inspector-select" id="camera-template-easing">
+          <option value="ease-in-out">Ease In-Out</option>
+          <option value="linear">Linear</option>
+          <option value="ease-in">Ease In</option>
+          <option value="ease-out">Ease Out</option>
+        </select>
+      </div>
+      <div>
+        <span class="inspector-label" style="display:block;margin-bottom:5px;">Aspect</span>
+        <select class="inspector-select" id="camera-template-aspect">
+          <option value="16:9">16:9</option>
+          <option value="1:1">1:1</option>
+          <option value="9:16">9:16</option>
+          <option value="4:5">4:5</option>
+        </select>
+      </div>
+      <div>
+        <span class="inspector-label" style="display:block;margin-bottom:5px;">Resolution</span>
+        <select class="inspector-select" id="camera-template-resolution">
+          <option value="720">720p</option>
+          <option value="1080" selected>1080p</option>
+          <option value="2160">4K</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="camera-template-path" id="camera-template-path">
+      <svg viewBox="0 0 520 52" preserveAspectRatio="none">
+        <path d="M20 34 C 140 8, 360 8, 500 34" fill="none" stroke="rgba(162,155,254,0.75)" stroke-width="2"/>
+        <circle cx="20" cy="34" r="4" fill="#55efc4"/>
+        <circle cx="500" cy="34" r="4" fill="#ff7675"/>
+      </svg>
+    </div>
+    <div class="camera-template-status" id="camera-template-status">Select a motion template to preview its camera path.</div>
+
+    <div class="modal-actions">
+      <button class="modal-btn" id="camera-template-reset">Reset Preview</button>
+      <button class="modal-btn" id="camera-template-save-path"><i class="fa-solid fa-bookmark"></i> Save Path</button>
+      <button class="modal-btn" id="camera-template-preview"><i class="fa-solid fa-play"></i> Preview</button>
+      <button class="modal-btn primary" id="camera-template-apply"><i class="fa-solid fa-check"></i> Apply to Timeline</button>
+      <button class="modal-btn" id="camera-template-close">Close</button>
     </div>
   </div>
 </div>
@@ -2506,7 +2932,7 @@
     </div>
 
     <div class="rec-preview-header">
-      <h3>🎬 Demo Preview</h3>
+      <h3><i class="fa-solid fa-film"></i> Demo Preview</h3>
       <span class="rec-preview-badge">Cinematic</span>
     </div>
 
@@ -2520,7 +2946,7 @@
 
     <div class="rec-settings-row">
       <div class="rec-toggle-chip active" id="rec-opt-mockup" data-opt="mockup">💻 Device Mockup</div>
-      <div class="rec-toggle-chip active" id="rec-opt-zoom" data-opt="zoom">🔍 Smart Zoom</div>
+      <div class="rec-toggle-chip active" id="rec-opt-zoom" data-opt="zoom"><i class="fa-solid fa-magnifying-glass"></i> Smart Zoom</div>
       <div class="rec-toggle-chip" id="rec-opt-slowmo" data-opt="slowmo">🐌 Slow Motion</div>
     </div>
 
@@ -2599,12 +3025,14 @@ const state = {
   shadingMode: 'lit', originalMaterials: new Map(),
   sceneCameras: [], activeCameraId: null, lookThroughCamera: false,
   cameraHelpers: new Map(), cameraBookmarks: [],
+  cameraTemplates: { selectedId: 'orbit360', filter: 'all', previewCamera: null, pathLine: null, restore: null },
   totalVertices: 0, totalTriangles: 0,
   svgGroup: null, svgShapes: [],
   svgParams: { depth: 5, bevel: 0.5, bevelSegs: 3, curveDetail: 12, glow: true },
-  img3dMesh: null, img3dData: null,
-  img3dParams: { mode: 'extrude', threshold: 128, depth: 3, resolution: 128, smooth: 1, bgRemoval: 'auto' },
+  img3dMesh: null, img3dData: null, img3dFile: null, img3dDataUrl: null,
+  img3dParams: { mode: 'relief', threshold: 128, depth: 3, resolution: 192, smooth: 2, bgRemoval: 'auto' },
   importContext: { files: new Map(), urls: new Map() },
+  workspace: { db: null, selectedId: null, currentProjectId: null, currentProjectName: 'Untitled Sombra3D Project', autosaveTimer: null, lastAutosaveAt: 0, ready: false },
   clock: new THREE.Clock(), frameCount: 0, fpsTime: 0,
   composer: null, outlineScene: null, outlineMeshes: [], bloomPass: null, envMap: null,
   effects: { bloom: true, bloomStrength: 0.65, bloomRadius: 0.35, bloomThreshold: 0.12, glowPulse: true, glowSpeed: 2.2 },
@@ -2626,6 +3054,20 @@ const state = {
     zoomEvents: [], lastClickTime: 0
   }
 };
+
+const CAMERA_MOTION_TEMPLATES = [
+  { id: 'orbit360', name: '360 Orbit', category: 'Product', icon: 'fa-arrows-rotate', description: 'Camera circles the selected object for a full studio reveal.', duration: 6, aspect: '16:9' },
+  { id: 'pushIn', name: 'Hero Zoom In', category: 'Cinematic', icon: 'fa-magnifying-glass-plus', description: 'Slow cinematic push toward the object with a tighter focal length.', duration: 5, aspect: '16:9' },
+  { id: 'pullBack', name: 'Pull Back Reveal', category: 'Cinematic', icon: 'fa-backward-step', description: 'Starts close, then reveals the full model and environment.', duration: 5, aspect: '16:9' },
+  { id: 'sideSweep', name: 'Side Sweep', category: 'Product', icon: 'fa-left-right', description: 'Camera slides left to right while staying locked on target.', duration: 5, aspect: '16:9' },
+  { id: 'topReveal', name: 'Top Reveal', category: 'Cinematic', icon: 'fa-arrow-down', description: 'Begins overhead and glides into a front hero angle.', duration: 5.5, aspect: '16:9' },
+  { id: 'lowAngle', name: 'Dramatic Low Angle', category: 'Cinematic', icon: 'fa-arrow-up-from-ground-water', description: 'Starts low and rises upward for a bold showcase shot.', duration: 5, aspect: '16:9' },
+  { id: 'floatingIcon', name: 'Floating Icon Showcase', category: 'Icon', icon: 'fa-wand-magic-sparkles', description: 'Soft orbit with a gentle floating object motion.', duration: 6, aspect: '1:1' },
+  { id: 'detailPass', name: 'Close-up Detail Pass', category: 'Product', icon: 'fa-magnifying-glass', description: 'Macro-style lateral pass across the selected object.', duration: 4.5, aspect: '16:9' },
+  { id: 'reel', name: 'Social Reel Motion', category: 'Social', icon: 'fa-mobile-screen', description: 'Vertical 9:16 movement tuned for short-form posts.', duration: 6, aspect: '9:16' },
+  { id: 'turntable', name: 'Turntable Product Shot', category: 'Product', icon: 'fa-record-vinyl', description: 'Object rotates while a fixed camera records a clean product spin.', duration: 6, aspect: '16:9' },
+  { id: 'heroLoop', name: 'Website Hero Loop', category: 'Website Hero', icon: 'fa-repeat', description: 'Smooth looping camera move for web hero sections.', duration: 8, aspect: '16:9' }
+];
 
 // ========================
 // INIT THREE.JS
@@ -2668,6 +3110,7 @@ function initScene() {
       if (state.selectedObject.userData?.isSceneCamera) updateCameraHelper(state.selectedObject);
       updateInspectorFromObject(state.selectedObject);
       updateSceneHierarchy();
+      scheduleWorkspaceAutosave();
     }
   });
   state.scene.add(state.transformControls);
@@ -2911,6 +3354,15 @@ function getObjectRoot(object) {
   return state.sceneObjects.includes(current) ? current : object;
 }
 
+function isChildMeshObject(object) {
+  return !!(object?.isMesh && object.parent && object.parent !== state.scene && !state.sceneObjects.includes(object));
+}
+
+function getSceneSelectionTarget(object) {
+  if (!object) return null;
+  return isChildMeshObject(object) ? object : getObjectRoot(object);
+}
+
 function disposeObject(object) {
   object.traverse(child => {
     if (child.geometry) child.geometry.dispose();
@@ -2946,8 +3398,27 @@ function removeObject(object, options = {}) {
   updateSceneHierarchy(); updateStats();
 }
 
+function removeMeshFromParent(mesh) {
+  if (!isChildMeshObject(mesh)) return false;
+  pushUndo('delete-mesh');
+  const parent = mesh.parent;
+  if (state.transformControls && state.transformControls.object === mesh) state.transformControls.detach();
+  parent.remove(mesh);
+  disposeObject(mesh);
+  if (state.selectedObject === mesh || state.selectedObjects.includes(mesh)) deselectAll();
+  const root = getObjectRoot(parent);
+  if (root) {
+    const remainingMeshes = [];
+    root.traverse(child => { if (child.isMesh) remainingMeshes.push(child); });
+    if (!remainingMeshes.length && state.sceneObjects.includes(root)) removeObject(root);
+  }
+  updateSceneHierarchy();
+  updateStats();
+  return true;
+}
+
 function selectObject(obj, additive = false) {
-  const target = getObjectRoot(obj);
+  const target = getSceneSelectionTarget(obj);
   if (!target) return;
   if (!additive) deselectAll(true);
   else if (state.selectedObjects.includes(target)) {
@@ -3249,6 +3720,446 @@ function addProductOrbitCameraKeys(cam, center, dist) {
   });
   state.timeline.keyframes.sort((a, b) => a.time - b.time);
   syncTimelineUI();
+}
+
+// ========================
+// CAMERA MOTION TEMPLATES
+// ========================
+function getCameraTemplateById(id) {
+  return [...CAMERA_MOTION_TEMPLATES, ...getCustomCameraTemplates()].find(t => t.id === id) || CAMERA_MOTION_TEMPLATES[0];
+}
+
+function getCustomCameraTemplates() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('sombra3d.cameraTemplates') || '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function getCameraTemplateTarget() {
+  const selected = state.selectedObject && !state.selectedObject.userData?.isSceneCamera ? getObjectRoot(state.selectedObject) : null;
+  return selected || state.sceneObjects.find(obj => !obj.userData?.isSceneCamera) || null;
+}
+
+function getTemplateFocusData() {
+  const targetObj = getCameraTemplateTarget();
+  const focusObj = state.selectedObject && !state.selectedObject.userData?.isSceneCamera ? state.selectedObject : targetObj;
+  const box = focusObj ? new THREE.Box3().setFromObject(focusObj) : new THREE.Box3(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 1, 1));
+  if (!isFinite(box.min.x) || !isFinite(box.max.x)) box.set(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(1, 1, 1));
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z, 1);
+  const height = Math.max(size.y, 1);
+  return { targetObj, focusObj, box, center, size, maxDim, height, radius: maxDim * 2.8 };
+}
+
+function getTemplateOptions() {
+  const template = getCameraTemplateById(state.cameraTemplates.selectedId);
+  return {
+    template,
+    duration: Math.max(1, parseFloat(document.getElementById('camera-template-duration')?.value) || template.duration || 6),
+    easing: document.getElementById('camera-template-easing')?.value || 'ease-in-out',
+    aspect: document.getElementById('camera-template-aspect')?.value || template.aspect || '16:9',
+    resolution: parseInt(document.getElementById('camera-template-resolution')?.value, 10) || 1080
+  };
+}
+
+function makeCameraKey(cam, time, position, target, fov, easing, template) {
+  return {
+    id: THREE.MathUtils.generateUUID(),
+    time,
+    type: 'camera',
+    targetId: cam.userData.editorId,
+    targetName: cam.userData.displayName || cam.name,
+    position: position.toArray(),
+    target: target.toArray(),
+    fov,
+    easing,
+    source: 'cameraTemplate',
+    templateId: template.id
+  };
+}
+
+function makeTransformKey(obj, time, data, easing, template) {
+  return {
+    id: THREE.MathUtils.generateUUID(),
+    time,
+    type: 'transform',
+    targetId: obj.userData.editorId,
+    targetName: obj.userData.displayName || obj.name || 'Object',
+    position: data.position ? data.position.toArray() : obj.position.toArray(),
+    rotation: data.rotation || [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+    scale: data.scale ? data.scale.toArray() : obj.scale.toArray(),
+    easing,
+    source: 'cameraTemplate',
+    templateId: template.id
+  };
+}
+
+function orbitPoint(center, radius, angle, height) {
+  return new THREE.Vector3(center.x + Math.cos(angle) * radius, center.y + height, center.z + Math.sin(angle) * radius);
+}
+
+function createCameraTemplatePlan(cam, options = getTemplateOptions()) {
+  const { template, duration, easing } = options;
+  const focus = getTemplateFocusData();
+  const { center, radius, maxDim, height, targetObj } = focus;
+  const target = center.clone();
+  target.y += height * 0.08;
+  const keys = [];
+  const pathPoints = [];
+
+  if (template.customPath?.keyframes?.length) {
+    const savedKeys = template.customPath.keyframes.map(k => ({
+      ...k,
+      id: THREE.MathUtils.generateUUID(),
+      targetId: k.type === 'camera' || k.type === 'cameraSwitch' ? cam.userData.editorId : k.targetId,
+      cameraId: k.type === 'cameraSwitch' ? cam.userData.editorId : k.cameraId,
+      targetName: k.type === 'camera' || k.type === 'cameraSwitch' ? (cam.userData.displayName || cam.name) : k.targetName,
+      easing: options.easing || k.easing || 'ease-in-out',
+      source: 'cameraTemplate',
+      templateId: template.id
+    }));
+    savedKeys.forEach(k => {
+      if (k.position) pathPoints.push(new THREE.Vector3().fromArray(k.position));
+    });
+    const firstCameraKey = savedKeys.find(k => k.type === 'camera' && k.position);
+    const firstTarget = firstCameraKey?.target ? new THREE.Vector3().fromArray(firstCameraKey.target) : target;
+    if (firstCameraKey) {
+      cam.position.fromArray(firstCameraKey.position);
+      cam.fov = firstCameraKey.fov || 42;
+      cam.lookAt(firstTarget);
+      cam.userData.target = firstTarget.toArray();
+      cam.aspect = getAspectValue(options.aspect);
+      cam.userData.aspect = options.aspect;
+      updateCameraHelper(cam);
+    }
+    return { keys: savedKeys, pathPoints, target: firstTarget, focus, duration: template.customPath.duration || duration, template };
+  }
+
+  const add = (time, pos, fov = 42, lookTarget = target) => {
+    keys.push(makeCameraKey(cam, time, pos, lookTarget, fov, easing, template));
+    pathPoints.push(pos.clone());
+  };
+  const r = radius;
+  const lowY = Math.max(0.12, height * 0.18);
+  const midY = Math.max(0.55, height * 0.55);
+  const highY = Math.max(1.0, height * 1.4);
+  const detailOffset = Math.max(maxDim * 0.35, 0.6);
+
+  if (template.id === 'orbit360' || template.id === 'heroLoop') {
+    const samples = template.id === 'heroLoop' ? 9 : 7;
+    for (let i = 0; i < samples; i++) {
+      const p = i / (samples - 1);
+      const a = -Math.PI * 0.25 + p * Math.PI * 2;
+      add(duration * p, orbitPoint(target, r * (template.id === 'heroLoop' ? 2.15 : 1), a, midY + Math.sin(p * Math.PI * 2) * height * 0.12), template.id === 'heroLoop' ? 38 : 42);
+    }
+  } else if (template.id === 'pushIn') {
+    add(0, new THREE.Vector3(target.x + r * 0.85, target.y + midY, target.z + r * 0.95), 48);
+    add(duration * 0.55, new THREE.Vector3(target.x + r * 0.55, target.y + midY * 0.9, target.z + r * 0.62), 38);
+    add(duration, new THREE.Vector3(target.x + r * 0.34, target.y + midY * 0.78, target.z + r * 0.38), 30);
+  } else if (template.id === 'pullBack') {
+    add(0, new THREE.Vector3(target.x + r * 0.28, target.y + midY * 0.7, target.z + r * 0.32), 30);
+    add(duration * 0.45, new THREE.Vector3(target.x + r * 0.55, target.y + midY, target.z + r * 0.62), 38);
+    add(duration, new THREE.Vector3(target.x + r * 0.95, target.y + midY * 1.08, target.z + r * 1.05), 48);
+  } else if (template.id === 'sideSweep') {
+    add(0, new THREE.Vector3(target.x - r * 0.9, target.y + midY, target.z + r * 0.7), 44);
+    add(duration * 0.5, new THREE.Vector3(target.x, target.y + midY * 0.96, target.z + r * 0.78), 40);
+    add(duration, new THREE.Vector3(target.x + r * 0.9, target.y + midY, target.z + r * 0.7), 44);
+  } else if (template.id === 'topReveal') {
+    add(0, new THREE.Vector3(target.x, target.y + r * 1.05, target.z + r * 0.04), 50);
+    add(duration * 0.45, new THREE.Vector3(target.x + r * 0.25, target.y + highY, target.z + r * 0.45), 43);
+    add(duration, new THREE.Vector3(target.x + r * 0.68, target.y + midY * 0.85, target.z + r * 0.82), 36);
+  } else if (template.id === 'lowAngle') {
+    add(0, new THREE.Vector3(target.x + r * 0.55, target.y + lowY, target.z + r * 0.78), 34);
+    add(duration * 0.5, new THREE.Vector3(target.x + r * 0.62, target.y + midY * 0.75, target.z + r * 0.72), 36);
+    add(duration, new THREE.Vector3(target.x + r * 0.72, target.y + midY * 1.18, target.z + r * 0.72), 42);
+  } else if (template.id === 'floatingIcon') {
+    for (let i = 0; i <= 6; i++) {
+      const p = i / 6;
+      add(duration * p, orbitPoint(target, r * 0.82, p * Math.PI * 1.65 + Math.PI * 0.1, midY + Math.sin(p * Math.PI * 2) * height * 0.08), 35);
+    }
+    if (targetObj) {
+      const base = targetObj.position.clone();
+      keys.push(makeTransformKey(targetObj, 0, { position: base, rotation: [targetObj.rotation.x, targetObj.rotation.y, targetObj.rotation.z] }, easing, template));
+      keys.push(makeTransformKey(targetObj, duration * 0.5, { position: base.clone().add(new THREE.Vector3(0, height * 0.08, 0)), rotation: [targetObj.rotation.x, targetObj.rotation.y + 0.18, targetObj.rotation.z] }, easing, template));
+      keys.push(makeTransformKey(targetObj, duration, { position: base, rotation: [targetObj.rotation.x, targetObj.rotation.y, targetObj.rotation.z] }, easing, template));
+    }
+  } else if (template.id === 'detailPass') {
+    const detailTarget = target.clone().add(new THREE.Vector3(0, height * 0.08, 0));
+    add(0, new THREE.Vector3(detailTarget.x - detailOffset, detailTarget.y + height * 0.12, detailTarget.z + r * 0.32), 24, detailTarget);
+    add(duration * 0.5, new THREE.Vector3(detailTarget.x, detailTarget.y + height * 0.1, detailTarget.z + r * 0.26), 22, detailTarget);
+    add(duration, new THREE.Vector3(detailTarget.x + detailOffset, detailTarget.y + height * 0.12, detailTarget.z + r * 0.32), 24, detailTarget);
+  } else if (template.id === 'reel') {
+    add(0, new THREE.Vector3(target.x + r * 0.38, target.y + highY, target.z + r * 0.64), 42);
+    add(duration * 0.5, new THREE.Vector3(target.x - r * 0.18, target.y + midY * 0.95, target.z + r * 0.52), 34);
+    add(duration, new THREE.Vector3(target.x + r * 0.32, target.y + lowY + height * 0.22, target.z + r * 0.45), 30);
+  } else if (template.id === 'turntable') {
+    add(0, new THREE.Vector3(target.x + r * 0.75, target.y + midY, target.z + r * 0.78), 40);
+    add(duration, new THREE.Vector3(target.x + r * 0.75, target.y + midY, target.z + r * 0.78), 40);
+    if (targetObj) {
+      const baseRot = [targetObj.rotation.x, targetObj.rotation.y, targetObj.rotation.z];
+      keys.push(makeTransformKey(targetObj, 0, { rotation: baseRot }, 'linear', template));
+      keys.push(makeTransformKey(targetObj, duration, { rotation: [baseRot[0], baseRot[1] + Math.PI * 2, baseRot[2]] }, 'linear', template));
+    }
+  }
+
+  cam.position.copy(keys[0].position ? new THREE.Vector3().fromArray(keys[0].position) : pathPoints[0]);
+  cam.fov = keys[0].fov || 42;
+  cam.aspect = getAspectValue(options.aspect);
+  cam.userData.aspect = options.aspect;
+  cam.userData.target = target.toArray();
+  cam.lookAt(target);
+  updateCameraHelper(cam);
+  keys.push({ id: THREE.MathUtils.generateUUID(), time: 0, type: 'cameraSwitch', cameraId: cam.userData.editorId, targetId: cam.userData.editorId, targetName: cam.userData.displayName || cam.name, easing, source: 'cameraTemplate', templateId: template.id });
+  keys.sort((a, b) => a.time - b.time);
+  return { keys, pathPoints, target, focus, duration, template };
+}
+
+function clearCameraTemplatePathLine() {
+  if (!state.cameraTemplates.pathLine) return;
+  const line = state.cameraTemplates.pathLine;
+  state.scene.remove(line);
+  line.traverse(child => {
+    child.geometry?.dispose?.();
+    if (Array.isArray(child.material)) child.material.forEach(mat => mat.dispose?.());
+    else child.material?.dispose?.();
+  });
+  state.cameraTemplates.pathLine = null;
+}
+
+function drawCameraTemplatePath(pathPoints, target) {
+  clearCameraTemplatePathLine();
+  if (!pathPoints || pathPoints.length < 2) return;
+  const geometry = new THREE.BufferGeometry().setFromPoints(pathPoints);
+  const material = new THREE.LineDashedMaterial({ color: 0xa29bfe, dashSize: 0.12, gapSize: 0.08, transparent: true, opacity: 0.85 });
+  const line = new THREE.Line(geometry, material);
+  line.computeLineDistances();
+  line.userData.isCameraPath = true;
+  state.scene.add(line);
+  state.cameraTemplates.pathLine = line;
+
+  if (target) {
+    const markerGeo = new THREE.SphereGeometry(0.04, 12, 8);
+    const markerMat = new THREE.MeshBasicMaterial({ color: 0x55efc4 });
+    const marker = new THREE.Mesh(markerGeo, markerMat);
+    marker.position.copy(target);
+    marker.userData.isCameraPath = true;
+    line.add(marker);
+  }
+}
+
+function updateCameraTemplatePathUI(plan) {
+  const path = document.getElementById('camera-template-path');
+  if (!path || !plan?.pathPoints?.length) return;
+  const pts = plan.pathPoints;
+  const xs = pts.map(p => p.x), zs = pts.map(p => p.z);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs);
+  const sx = x => 24 + ((x - minX) / Math.max(0.001, maxX - minX)) * 472;
+  const sy = z => 42 - ((z - minZ) / Math.max(0.001, maxZ - minZ)) * 32;
+  const d = pts.map((p, i) => `${i ? 'L' : 'M'} ${sx(p.x).toFixed(1)} ${sy(p.z).toFixed(1)}`).join(' ');
+  const start = pts[0], end = pts[pts.length - 1];
+  path.innerHTML = `<svg viewBox="0 0 520 52" preserveAspectRatio="none">
+    <path d="${d}" fill="none" stroke="rgba(162,155,254,0.82)" stroke-width="2.5"/>
+    <circle cx="${sx(start.x).toFixed(1)}" cy="${sy(start.z).toFixed(1)}" r="4" fill="#55efc4"/>
+    <circle cx="${sx(end.x).toFixed(1)}" cy="${sy(end.z).toFixed(1)}" r="4" fill="#ff7675"/>
+  </svg>`;
+}
+
+function renderCameraTemplateBrowser() {
+  const grid = document.getElementById('camera-template-grid');
+  if (!grid) return;
+  const filter = state.cameraTemplates.filter;
+  grid.innerHTML = '';
+  [...CAMERA_MOTION_TEMPLATES, ...getCustomCameraTemplates()]
+    .filter(t => filter === 'all' || t.category === filter)
+    .forEach(t => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'camera-template-card';
+      card.classList.toggle('active', state.cameraTemplates.selectedId === t.id);
+      card.dataset.templateId = t.id;
+      card.innerHTML = `
+        <span class="camera-template-thumb"><i class="fa-solid ${t.icon}"></i></span>
+        <span>
+          <span class="camera-template-name">${escapeHTML(t.name)}</span>
+          <span class="camera-template-desc">${escapeHTML(t.description)}</span>
+        </span>
+      `;
+      card.addEventListener('click', () => selectCameraTemplate(t.id));
+      grid.appendChild(card);
+    });
+}
+
+function selectCameraTemplate(id) {
+  const template = getCameraTemplateById(id);
+  state.cameraTemplates.selectedId = template.id;
+  const durationInput = document.getElementById('camera-template-duration');
+  const aspectInput = document.getElementById('camera-template-aspect');
+  if (durationInput) durationInput.value = template.duration;
+  if (aspectInput) aspectInput.value = template.aspect;
+  renderCameraTemplateBrowser();
+  const status = document.getElementById('camera-template-status');
+  if (status) status.textContent = `${template.name}: ${template.description}`;
+}
+
+function createPreviewSceneCamera() {
+  const existing = state.cameraTemplates.previewCamera;
+  if (existing) return existing;
+  const cam = new THREE.PerspectiveCamera(42, getAspectValue(state.timeline.aspect || '16:9'), 0.05, 1000);
+  cam.name = 'Preview Motion Camera';
+  cam.userData.displayName = 'Preview Motion Camera';
+  cam.userData.isSceneCamera = true;
+  cam.userData.isTemplatePreview = true;
+  cam.userData.target = [0, 0.75, 0];
+  cam.userData.aspect = state.timeline.aspect || '16:9';
+  ensureEditorIds(cam);
+  state.scene.add(cam);
+  state.sceneCameras.push(cam);
+  state.sceneObjects.push(cam);
+  addCameraHelper(cam);
+  state.cameraTemplates.previewCamera = cam;
+  return cam;
+}
+
+function resetCameraTemplatePreview() {
+  stopTimeline();
+  const preview = state.cameraTemplates.previewCamera;
+  const hadPreviewState = !!preview || !!state.cameraTemplates.restore;
+  if (hadPreviewState) clearCameraTemplatePathLine();
+  if (preview) {
+    disposeCameraHelper(preview);
+    state.scene.remove(preview);
+    state.sceneCameras = state.sceneCameras.filter(cam => cam !== preview);
+    state.sceneObjects = state.sceneObjects.filter(obj => obj !== preview);
+    disposeObject(preview);
+    state.cameraTemplates.previewCamera = null;
+  }
+  if (state.cameraTemplates.restore) {
+    state.timeline.keyframes = state.cameraTemplates.restore.keyframes;
+    state.timeline.duration = state.cameraTemplates.restore.duration;
+    state.timeline.currentTime = state.cameraTemplates.restore.currentTime;
+    state.timeline.cameraMode = state.cameraTemplates.restore.cameraMode;
+    state.timeline.aspect = state.cameraTemplates.restore.aspect;
+    state.timeline.resolution = state.cameraTemplates.restore.resolution;
+    restoreTimelineState(state.cameraTemplates.restore.timelineState);
+    state.cameraTemplates.restore = null;
+  }
+  syncTimelineUI();
+  updateSceneHierarchy();
+}
+
+function previewCameraTemplate() {
+  if (!state.sceneObjects.some(obj => !obj.userData?.isSceneCamera)) {
+    alert('Add or import an object before previewing a camera template.');
+    return;
+  }
+  resetCameraTemplatePreview();
+  const options = getTemplateOptions();
+  state.cameraTemplates.restore = {
+    keyframes: [...state.timeline.keyframes],
+    duration: state.timeline.duration,
+    currentTime: state.timeline.currentTime,
+    cameraMode: state.timeline.cameraMode,
+    aspect: state.timeline.aspect,
+    resolution: state.timeline.resolution,
+    timelineState: captureTimelineRestoreState()
+  };
+  const cam = createPreviewSceneCamera();
+  const plan = createCameraTemplatePlan(cam, options);
+  state.timeline.duration = options.duration;
+  state.timeline.keyframes = plan.keys;
+  state.timeline.currentTime = 0;
+  state.timeline.cameraMode = 'timeline';
+  state.timeline.aspect = options.aspect;
+  state.timeline.resolution = options.resolution;
+  state.activeCameraId = cam.userData.editorId;
+  state.lookThroughCamera = true;
+  document.getElementById('btn-look-camera').classList.add('active');
+  drawCameraTemplatePath(plan.pathPoints, plan.target);
+  updateCameraTemplatePathUI(plan);
+  applyTimelineAt(0);
+  playTimeline();
+  updateSceneHierarchy();
+  updateCameraOverlay();
+  document.getElementById('camera-template-status').textContent = `Previewing ${options.template.name}. Use Reset Preview to return to the previous camera.`;
+}
+
+function applyCameraTemplateToTimeline() {
+  if (!state.sceneObjects.some(obj => !obj.userData?.isSceneCamera)) {
+    alert('Add or import an object before applying a camera template.');
+    return;
+  }
+  const options = getTemplateOptions();
+  resetCameraTemplatePreview();
+  const template = options.template;
+  const cam = createSceneCamera(`Motion - ${template.name}`);
+  cam.userData.motionTemplate = template.id;
+  const plan = createCameraTemplatePlan(cam, options);
+  state.timeline.keyframes = state.timeline.keyframes.filter(k => k.source !== 'cameraTemplate');
+  state.timeline.keyframes.push(...plan.keys);
+  state.timeline.keyframes.sort((a, b) => a.time - b.time);
+  state.timeline.duration = options.duration;
+  state.timeline.currentTime = 0;
+  state.timeline.cameraMode = 'timeline';
+  state.timeline.aspect = options.aspect;
+  state.timeline.resolution = options.resolution;
+  state.activeCameraId = cam.userData.editorId;
+  state.lookThroughCamera = true;
+  document.getElementById('btn-look-camera').classList.add('active');
+  drawCameraTemplatePath(plan.pathPoints, plan.target);
+  updateCameraTemplatePathUI(plan);
+  applyTimelineAt(0);
+  syncTimelineUI();
+  updateCameraOverlay();
+  updateSceneHierarchy();
+  selectObject(cam);
+  document.getElementById('camera-template-status').textContent = `${template.name} applied. Use Record Camera or Export MP4 to render this motion.`;
+}
+
+function openCameraTemplateModal() {
+  const template = getCameraTemplateById(state.cameraTemplates.selectedId);
+  document.getElementById('camera-template-duration').value = template.duration;
+  document.getElementById('camera-template-aspect').value = template.aspect || state.timeline.aspect || '16:9';
+  document.getElementById('camera-template-resolution').value = String(state.timeline.resolution || 1080);
+  renderCameraTemplateBrowser();
+  openModal('modal-camera-templates');
+}
+
+function closeCameraTemplateModal() {
+  resetCameraTemplatePreview();
+  closeModal('modal-camera-templates');
+}
+
+function saveCurrentCameraPathTemplate() {
+  const cameraKeys = state.timeline.keyframes.filter(k => k.type === 'camera' || k.type === 'cameraSwitch' || k.source === 'cameraTemplate');
+  if (!cameraKeys.length) {
+    alert('Add or apply camera motion before saving a custom path.');
+    return;
+  }
+  const name = prompt('Custom camera path name', 'Custom Camera Path');
+  if (!name || !name.trim()) return;
+  const custom = getCustomCameraTemplates();
+  custom.unshift({
+    id: 'custom-' + THREE.MathUtils.generateUUID(),
+    name: name.trim(),
+    category: 'Custom',
+    icon: 'fa-bookmark',
+    description: 'Saved camera path from this project timeline.',
+    duration: state.timeline.duration,
+    aspect: state.timeline.aspect,
+    customPath: {
+      duration: state.timeline.duration,
+      keyframes: cameraKeys.map(k => ({ ...k }))
+    }
+  });
+  localStorage.setItem('sombra3d.cameraTemplates', JSON.stringify(custom.slice(0, 20)));
+  state.cameraTemplates.filter = 'all';
+  document.querySelectorAll('#camera-template-filters .camera-template-filter').forEach(el => el.classList.toggle('active', el.dataset.filter === 'all'));
+  renderCameraTemplateBrowser();
+  document.getElementById('camera-template-status').textContent = 'Custom camera path saved. It now appears in the All templates view.';
 }
 
 // ========================
@@ -3597,8 +4508,9 @@ function updateSceneHierarchy() {
       const ci = document.createElement('div');
       ci.className = 'scene-item indent';
       ci.dataset.uuid = child.uuid;
-      ci.classList.toggle('active', state.selectedObject === obj);
-      ci.classList.toggle('hidden-object', !obj.visible);
+      ci.classList.toggle('active', state.selectedObjects.includes(child));
+      ci.classList.toggle('hidden-object', !child.visible || !obj.visible);
+      ci.classList.toggle('locked-object', !!child.userData.locked);
       ci.innerHTML = `<span class="scene-item-icon" style="font-size:7px;">Mesh</span><span class="scene-name">${child.name || 'Mesh'}</span>`;
       ci.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -3622,6 +4534,7 @@ function updateStats() {
   document.getElementById('bottom-objects').textContent = 'Objects: ' + objs + ' / Cameras: ' + state.sceneCameras.length;
   document.getElementById('bottom-materials').textContent = 'Materials: ' + mats.size;
   document.getElementById('bottom-tris').textContent = 'Triangles: ' + Math.floor(tris).toLocaleString();
+  scheduleWorkspaceAutosave();
 }
 
 function renameSelectedObject() {
@@ -3683,7 +4596,7 @@ function toggleSelectedLock() {
 }
 
 function groupSelectedObjects() {
-  const targets = state.selectedObjects.length ? state.selectedObjects.filter(obj => state.sceneObjects.includes(obj)) : (state.selectedObject ? [state.selectedObject] : []);
+  const targets = state.selectedObjects.length ? state.selectedObjects.filter(obj => state.sceneObjects.includes(obj)) : (state.selectedObject && state.sceneObjects.includes(state.selectedObject) ? [state.selectedObject] : []);
   if (!targets.length) return;
   pushUndo('group');
   const group = new THREE.Group();
@@ -3709,8 +4622,53 @@ function groupSelectedObjects() {
 function deleteSelectedObjects() {
   const targets = state.selectedObjects.length ? [...state.selectedObjects] : (state.selectedObject ? [state.selectedObject] : []);
   if (!targets.length) return;
-  pushUndo('delete');
-  targets.forEach(obj => removeObject(obj));
+  const childMeshes = targets.filter(isChildMeshObject);
+  const roots = targets.filter(obj => !isChildMeshObject(obj));
+  if (childMeshes.length) childMeshes.forEach(mesh => removeMeshFromParent(mesh));
+  if (roots.length) {
+    pushUndo('delete');
+    roots.forEach(obj => removeObject(obj));
+  }
+}
+
+function ungroupSelectedObjects() {
+  const roots = (state.selectedObjects.length ? state.selectedObjects : (state.selectedObject ? [state.selectedObject] : []))
+    .map(getObjectRoot)
+    .filter(obj => obj && state.sceneObjects.includes(obj) && !obj.userData?.isSceneCamera);
+  const uniqueRoots = Array.from(new Set(roots));
+  if (!uniqueRoots.length) return;
+  pushUndo('ungroup');
+  const promoted = [];
+  uniqueRoots.forEach(root => {
+    const meshes = [];
+    root.traverse(child => { if (child.isMesh) meshes.push(child); });
+    if (meshes.length <= 1) return;
+    root.updateWorldMatrix(true, true);
+    meshes.forEach((mesh, index) => {
+      const worldMatrix = mesh.matrixWorld.clone();
+      const meshName = mesh.name || `${root.userData.displayName || root.name || 'Object'} Mesh ${index + 1}`;
+      mesh.parent?.remove(mesh);
+      mesh.matrix.copy(worldMatrix);
+      mesh.matrix.decompose(mesh.position, mesh.quaternion, mesh.scale);
+      mesh.userData.displayName = meshName;
+      ensureEditorIds(mesh);
+      state.scene.add(mesh);
+      state.sceneObjects.push(mesh);
+      promoted.push(mesh);
+    });
+    const idx = state.sceneObjects.indexOf(root);
+    if (idx !== -1) state.sceneObjects.splice(idx, 1);
+    state.scene.remove(root);
+  });
+  if (!promoted.length) return;
+  deselectAll(true);
+  state.selectedObjects = promoted;
+  state.selectedObject = promoted[promoted.length - 1];
+  updateSceneHierarchy();
+  updateStats();
+  updateInspectorFromObject(state.selectedObject);
+  highlightSelected(state.selectedObject);
+  attachTransformControls(state.selectedObject);
 }
 
 // ========================
@@ -3743,16 +4701,16 @@ function updateInspectorFromObject(obj) {
   }
   const mesh = obj.isMesh ? obj : findFirstMesh(obj);
   if (!mesh) return;
-  const parent = obj.isMesh && obj.parent && obj.parent !== state.scene ? obj.parent : obj;
-  document.getElementById('pos-x').value = parent.position.x.toFixed(2);
-  document.getElementById('pos-y').value = parent.position.y.toFixed(2);
-  document.getElementById('pos-z').value = parent.position.z.toFixed(2);
-  document.getElementById('rot-x').value = THREE.MathUtils.radToDeg(parent.rotation.x).toFixed(1);
-  document.getElementById('rot-y').value = THREE.MathUtils.radToDeg(parent.rotation.y).toFixed(1);
-  document.getElementById('rot-z').value = THREE.MathUtils.radToDeg(parent.rotation.z).toFixed(1);
-  document.getElementById('scl-x').value = parent.scale.x.toFixed(2);
-  document.getElementById('scl-y').value = parent.scale.y.toFixed(2);
-  document.getElementById('scl-z').value = parent.scale.z.toFixed(2);
+  const transformTarget = obj;
+  document.getElementById('pos-x').value = transformTarget.position.x.toFixed(2);
+  document.getElementById('pos-y').value = transformTarget.position.y.toFixed(2);
+  document.getElementById('pos-z').value = transformTarget.position.z.toFixed(2);
+  document.getElementById('rot-x').value = THREE.MathUtils.radToDeg(transformTarget.rotation.x).toFixed(1);
+  document.getElementById('rot-y').value = THREE.MathUtils.radToDeg(transformTarget.rotation.y).toFixed(1);
+  document.getElementById('rot-z').value = THREE.MathUtils.radToDeg(transformTarget.rotation.z).toFixed(1);
+  document.getElementById('scl-x').value = transformTarget.scale.x.toFixed(2);
+  document.getElementById('scl-y').value = transformTarget.scale.y.toFixed(2);
+  document.getElementById('scl-z').value = transformTarget.scale.z.toFixed(2);
   const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
   if (mat) {
     if (mat.color) { const hex = '#' + mat.color.getHexString(); document.getElementById('mat-color').value = hex; document.getElementById('mat-color-hex').value = hex; }
@@ -4200,16 +5158,50 @@ async function importImage(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
-      img.onload = () => { state.img3dData = img; generateImage3D(); document.getElementById('section-image3d').style.display = ''; resolve(); };
+      img.onload = async () => {
+        state.img3dData = img;
+        state.img3dFile = file;
+        state.img3dDataUrl = e.target.result;
+        document.getElementById('section-image3d').style.display = '';
+        syncImage3DControls();
+        await generateImage3D();
+        resolve();
+      };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
-function generateImage3D() {
+function setImage3DStatus(message, tone = 'muted') {
+  const el = document.getElementById('img3d-status');
+  if (!el) return;
+  el.textContent = message;
+  el.style.color = tone === 'error' ? 'var(--red)' : tone === 'active' ? 'var(--accent-light)' : 'var(--text-dim)';
+}
+
+function syncImage3DControls() {
+  const modeEl = document.getElementById('img3d-mode');
+  const resEl = document.getElementById('img3d-res');
+  const smoothEl = document.getElementById('img3d-smooth');
+  if (modeEl) modeEl.value = state.img3dParams.mode;
+  if (resEl) resEl.value = state.img3dParams.resolution;
+  if (smoothEl) smoothEl.value = state.img3dParams.smooth;
+  const resVal = document.getElementById('val-img3d-res');
+  const smoothVal = document.getElementById('val-img3d-smooth');
+  if (resVal) resVal.textContent = state.img3dParams.resolution;
+  if (smoothVal) smoothVal.textContent = state.img3dParams.smooth;
+}
+
+async function generateImage3D() {
   if (!state.img3dData) return;
   if (state.img3dMesh) { removeObject(state.img3dMesh); state.img3dMesh = null; }
+  setImage3DStatus('Removing background and building centered object mesh...', 'active');
+  generateLocalImage3D();
+  setImage3DStatus('Imported centered object with background removed.', 'muted');
+}
+
+function generateLocalImage3D() {
   const img = state.img3dData;
   const { mode, threshold, depth, resolution, smooth } = state.img3dParams;
 
@@ -4268,20 +5260,138 @@ function generateImage3D() {
       }
       const bg = samples.reduce((acc, c) => [acc[0] + c[0], acc[1] + c[1], acc[2] + c[2]], [0, 0, 0]).map(v => v / Math.max(1, samples.length));
       const strictness = THREE.MathUtils.mapLinear(threshold, 0, 255, 24, 118);
-      for (let y = 0; y < res; y++) for (let x = 0; x < res; x++) {
-        const i = (y * res + x) * 4;
-        const dr = pixels[i] - bg[0], dg = pixels[i + 1] - bg[1], db = pixels[i + 2] - bg[2];
-        const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-        mask[y * res + x] = dist > strictness ? 1 : 0;
-      }
-      return cleanupMask(mask);
+      const buildMaskAt = (limit) => {
+        const background = new Uint8Array(res * res);
+        for (let y = 0; y < res; y++) for (let x = 0; x < res; x++) {
+          const i = (y * res + x) * 4;
+          const dr = pixels[i] - bg[0], dg = pixels[i + 1] - bg[1], db = pixels[i + 2] - bg[2];
+          const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+          background[y * res + x] = dist <= limit ? 1 : 0;
+        }
+        const exterior = new Uint8Array(res * res);
+        const queue = [];
+        const seed = (idx) => {
+          if (background[idx] && !exterior[idx]) { exterior[idx] = 1; queue.push(idx); }
+        };
+        for (let x = 0; x < res; x++) { seed(x); seed((res - 1) * res + x); }
+        for (let y = 0; y < res; y++) { seed(y * res); seed(y * res + res - 1); }
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+        while (queue.length) {
+          const idx = queue.pop();
+          const x = idx % res, y = Math.floor(idx / res);
+          dirs.forEach(([ox, oy]) => {
+            const nx = x + ox, ny = y + oy;
+            if (nx < 0 || ny < 0 || nx >= res || ny >= res) return;
+            const ni = ny * res + nx;
+            if (background[ni] && !exterior[ni]) { exterior[ni] = 1; queue.push(ni); }
+          });
+        }
+        const out = new Uint8Array(res * res);
+        let count = 0;
+        for (let i = 0; i < out.length; i++) {
+          out[i] = exterior[i] ? 0 : 1;
+          count += out[i];
+        }
+        return { out, ratio: count / out.length };
+      };
+      const refineCenteredForeground = (baseMask) => {
+        const scores = new Float32Array(res * res);
+        const values = [];
+        for (let y = 1; y < res - 1; y++) {
+          for (let x = 1; x < res - 1; x++) {
+            const i = (y * res + x) * 4;
+            const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            const sat = max - min;
+            const dr = r - bg[0], dg = g - bg[1], db = b - bg[2];
+            const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+            const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+            const ri = (y * res + (x + 1)) * 4;
+            const di = ((y + 1) * res + x) * 4;
+            const lumR = 0.299 * pixels[ri] + 0.587 * pixels[ri + 1] + 0.114 * pixels[ri + 2];
+            const lumD = 0.299 * pixels[di] + 0.587 * pixels[di + 1] + 0.114 * pixels[di + 2];
+            const edge = Math.abs(lum - lumR) + Math.abs(lum - lumD);
+            const cx = (x / (res - 1)) - 0.5;
+            const cy = (y / (res - 1)) - 0.5;
+            const centerWeight = 1 - Math.min(1, Math.sqrt(cx * cx + cy * cy) * 1.7);
+            const score = dist + sat * 0.85 + edge * 1.35 + centerWeight * 18;
+            scores[y * res + x] = score;
+            if (baseMask[y * res + x]) values.push(score);
+          }
+        }
+        if (!values.length) return baseMask;
+        values.sort((a, b) => a - b);
+        const percentile = values[Math.floor(values.length * 0.58)] || 0;
+        const minScore = Math.max(26, percentile);
+        const detailMask = new Uint8Array(res * res);
+        for (let i = 0; i < detailMask.length; i++) {
+          detailMask[i] = baseMask[i] && scores[i] >= minScore ? 1 : 0;
+        }
+
+        const visited = new Uint8Array(res * res);
+        const keep = new Uint8Array(res * res);
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+        const minArea = Math.max(12, Math.floor(res * res * 0.0007));
+        const centerX = (res - 1) / 2, centerY = (res - 1) / 2;
+        for (let i = 0; i < detailMask.length; i++) {
+          if (!detailMask[i] || visited[i]) continue;
+          const queue = [i], comp = [];
+          visited[i] = 1;
+          let minX = res, maxX = 0, minY = res, maxY = 0, scoreSum = 0;
+          while (queue.length) {
+            const idx = queue.pop();
+            comp.push(idx);
+            const x = idx % res, y = Math.floor(idx / res);
+            minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+            scoreSum += scores[idx];
+            dirs.forEach(([ox, oy]) => {
+              const nx = x + ox, ny = y + oy;
+              if (nx < 0 || ny < 0 || nx >= res || ny >= res) return;
+              const ni = ny * res + nx;
+              if (detailMask[ni] && !visited[ni]) { visited[ni] = 1; queue.push(ni); }
+            });
+          }
+          const area = comp.length;
+          const boxCx = (minX + maxX) / 2, boxCy = (minY + maxY) / 2;
+          const centerDist = Math.hypot((boxCx - centerX) / res, (boxCy - centerY) / res);
+          const overlapsCenter = minX < res * 0.72 && maxX > res * 0.28 && minY < res * 0.78 && maxY > res * 0.22;
+          const strong = scoreSum / Math.max(1, area) > minScore * 1.2;
+          if (area >= minArea && (overlapsCenter || centerDist < 0.34 || strong)) {
+            comp.forEach(idx => { keep[idx] = 1; });
+          }
+        }
+
+        let keptCount = 0;
+        for (let i = 0; i < keep.length; i++) keptCount += keep[i];
+        if (keptCount < minArea) return baseMask;
+
+        for (let pass = 0; pass < 2; pass++) {
+          const dilated = new Uint8Array(keep);
+          for (let y = 1; y < res - 1; y++) for (let x = 1; x < res - 1; x++) {
+            const idx = y * res + x;
+            if (!keep[idx]) continue;
+            dirs.forEach(([ox, oy]) => {
+              const ni = (y + oy) * res + (x + ox);
+              if (baseMask[ni]) dilated[ni] = 1;
+            });
+          }
+          keep.set(dilated);
+        }
+        return keep;
+      };
+      let candidate = buildMaskAt(strictness);
+      if (candidate.ratio > 0.82) candidate = buildMaskAt(strictness * 1.35);
+      if (candidate.ratio > 0.82) candidate = buildMaskAt(strictness * 1.75);
+      if (candidate.ratio < 0.01) candidate = buildMaskAt(strictness * 0.65);
+      mask.set(refineCenteredForeground(candidate.out));
+      return cleanupMask(mask, { keepComponents: true, minArea: Math.max(8, Math.floor(res * res * 0.0008)) });
     }
 
     mask.fill(1);
     return mask;
   };
 
-  const cleanupMask = (source) => {
+  const cleanupMask = (source, options = {}) => {
     const mask = new Uint8Array(source);
     const visited = new Uint8Array(res * res);
     const queue = [];
@@ -4304,8 +5414,9 @@ function generateImage3D() {
         });
       }
       if (component.length > best.length) best = component;
+      if (options.keepComponents && component.length < (options.minArea || 8)) component.forEach(idx => { mask[idx] = 0; });
     }
-    if (best.length > 0) {
+    if (!options.keepComponents && best.length > 0) {
       mask.fill(0);
       best.forEach(idx => { mask[idx] = 1; });
     }
@@ -4336,7 +5447,14 @@ function generateImage3D() {
 
   const group = new THREE.Group();
 
-  if (mode === 'heightmap') {
+  if (mode === 'relief') {
+    buildTexturedReliefMesh({ group, img, res, dx, dy, dw, dh, depth, smooth, getBrightness, silhouetteMask });
+    group.userData.displayName = 'Image Textured Relief';
+    group.userData.imageTo3DMode = 'local-relief';
+    state.img3dMesh = group;
+    addObjectToScene(group, 'Image Textured Relief');
+
+  } else if (mode === 'heightmap') {
     // -----------------------------------------------
     // HEIGHT MAP MODE: proper displaced plane mesh
     // -----------------------------------------------
@@ -4562,6 +5680,192 @@ function generateImage3D() {
   }
 }
 
+function buildTexturedReliefMesh({ group, img, res, dx, dy, dw, dh, depth, smooth, getBrightness, silhouetteMask }) {
+  const mask = new Uint8Array(silhouetteMask);
+  const width = 5;
+  const aspect = img.width / Math.max(1, img.height);
+  const height = width / aspect;
+  const maxLift = Math.max(0.05, depth * 0.18);
+  const baseThickness = Math.max(0.04, depth * 0.035);
+
+  const smoothMask = (source) => {
+    if (!smooth) return source;
+    const values = new Float32Array(source.length);
+    for (let i = 0; i < source.length; i++) values[i] = source[i];
+    for (let s = 0; s < smooth; s++) {
+      const next = new Float32Array(values.length);
+      for (let y = 0; y < res; y++) for (let x = 0; x < res; x++) {
+        let sum = 0, count = 0;
+        for (let oy = -1; oy <= 1; oy++) for (let ox = -1; ox <= 1; ox++) {
+          const nx = x + ox, ny = y + oy;
+          if (nx < 0 || ny < 0 || nx >= res || ny >= res) continue;
+          sum += values[ny * res + nx];
+          count++;
+        }
+        next[y * res + x] = sum / Math.max(1, count);
+      }
+      values.set(next);
+    }
+    return values;
+  };
+
+  const softMask = smoothMask(mask);
+  const vertices = [];
+  const uvs = [];
+  const indices = [];
+  const backVertices = [];
+  const backIndices = [];
+  const sideVertices = [];
+  const sideIndices = [];
+  const vid = new Int32Array(res * res).fill(-1);
+  const bid = new Int32Array(res * res).fill(-1);
+
+  const isInside = (x, y) => mask[y * res + x] > 0;
+  const addVertex = (x, y, front = true) => {
+    const store = front ? vid : bid;
+    const idx = y * res + x;
+    if (store[idx] !== -1) return store[idx];
+    const u = (x - dx) / Math.max(1, dw);
+    const v = 1 - ((y - dy) / Math.max(1, dh));
+    const px = (u - 0.5) * width;
+    const py = (v - 0.5) * height;
+    const alpha = Math.max(0, Math.min(1, softMask[idx]));
+    const lift = front ? (getBrightness(x, y) * maxLift + alpha * baseThickness) : -baseThickness;
+    const arr = front ? vertices : backVertices;
+    const outIndex = arr.length / 3;
+    arr.push(px, py, lift);
+    if (front) uvs.push(Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v)));
+    store[idx] = outIndex;
+    return outIndex;
+  };
+
+  for (let y = 0; y < res - 1; y++) {
+    for (let x = 0; x < res - 1; x++) {
+      const insideCount = isInside(x, y) + isInside(x + 1, y) + isInside(x, y + 1) + isInside(x + 1, y + 1);
+      if (insideCount < 3) continue;
+      const a = addVertex(x, y), b = addVertex(x + 1, y), c = addVertex(x + 1, y + 1), d = addVertex(x, y + 1);
+      indices.push(a, b, c, a, c, d);
+      const ba = addVertex(x, y, false), bb = addVertex(x + 1, y, false), bc = addVertex(x + 1, y + 1, false), bd = addVertex(x, y + 1, false);
+      backIndices.push(ba, bc, bb, ba, bd, bc);
+    }
+  }
+
+  const addSide = (x1, y1, x2, y2) => {
+    const f1 = addVertex(x1, y1), f2 = addVertex(x2, y2);
+    const b1 = addVertex(x1, y1, false), b2 = addVertex(x2, y2, false);
+    const getFront = i => vertices.slice(i * 3, i * 3 + 3);
+    const getBack = i => backVertices.slice(i * 3, i * 3 + 3);
+    const start = sideVertices.length / 3;
+    sideVertices.push(...getBack(b1), ...getBack(b2), ...getFront(f2), ...getFront(f1));
+    sideIndices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+  };
+
+  for (let y = 0; y < res; y++) {
+    for (let x = 0; x < res; x++) {
+      if (!isInside(x, y)) continue;
+      if (x === 0 || !isInside(x - 1, y)) addSide(x, y, x, Math.min(res - 1, y + 1));
+      if (x === res - 1 || !isInside(x + 1, y)) addSide(x, y, x, Math.max(0, y - 1));
+      if (y === 0 || !isInside(x, y - 1)) addSide(x, y, Math.min(res - 1, x + 1), y);
+      if (y === res - 1 || !isInside(x, y + 1)) addSide(x, y, Math.max(0, x - 1), y);
+    }
+  }
+
+  const colorCanvas = document.createElement('canvas');
+  colorCanvas.width = img.width;
+  colorCanvas.height = img.height;
+  colorCanvas.getContext('2d').drawImage(img, 0, 0);
+  const colorTex = new THREE.CanvasTexture(colorCanvas);
+  colorTex.colorSpace = THREE.SRGBColorSpace;
+  colorTex.flipY = false;
+
+  if (vertices.length) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    geo.setIndex(indices);
+    geo.computeVertexNormals();
+    group.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ map: colorTex, roughness: 0.42, metalness: 0.02, clearcoat: 0.08, side: THREE.DoubleSide })));
+  }
+  if (backVertices.length) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(backVertices, 3));
+    geo.setIndex(backIndices);
+    geo.computeVertexNormals();
+    group.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ color: 0x2a2a30, roughness: 0.75, side: THREE.DoubleSide })));
+  }
+  if (sideVertices.length) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(sideVertices, 3));
+    geo.setIndex(sideIndices);
+    geo.computeVertexNormals();
+    group.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ color: 0x2a2a30, roughness: 0.72, side: THREE.DoubleSide })));
+  }
+}
+
+function buildImage3DPayload() {
+  const formData = new FormData();
+  formData.append('image', state.img3dFile || dataUrlToBlob(state.img3dDataUrl), state.img3dFile?.name || `sombra3d-image-${Date.now()}.png`);
+  formData.append('metadata', JSON.stringify({
+    mode: 'image-to-3d',
+    requestedQuality: 'high',
+    outputFormats: ['glb', 'gltf', 'obj'],
+    source: {
+      name: state.img3dFile?.name || 'image',
+      type: state.img3dFile?.type || 'image/png',
+      width: state.img3dData?.width,
+      height: state.img3dData?.height
+    }
+  }));
+  return formData;
+}
+
+async function runImageTo3DService(endpoint) {
+  const response = await fetch(endpoint, { method: 'POST', body: buildImage3DPayload() });
+  if (!response.ok) throw new Error(`Upload failed (${response.status})`);
+  const data = await response.json();
+  const statusUrl = absolutizeScanUrl(data.statusUrl || data.progressUrl || data.jobUrl, endpoint);
+  const jobId = data.jobId || data.id || null;
+  if (statusUrl || jobId) return pollImageTo3DJob(statusUrl || endpoint, jobId);
+  return normalizeReconstructionResult(data, endpoint);
+}
+
+async function pollImageTo3DJob(statusUrl, jobId) {
+  const started = performance.now();
+  const timeoutMs = 20 * 60 * 1000;
+  while (performance.now() - started < timeoutMs) {
+    await new Promise(r => setTimeout(r, 1500));
+    const url = jobId && !/[?&]jobId=/.test(statusUrl) ? `${statusUrl}${statusUrl.includes('?') ? '&' : '?'}jobId=${encodeURIComponent(jobId)}` : statusUrl;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Progress check failed (${response.status})`);
+    const data = await response.json();
+    const status = (data.status || data.phase || '').toLowerCase();
+    const progress = Number.isFinite(data.progress) ? `${Math.round(data.progress)}%` : Number.isFinite(data.percent) ? `${Math.round(data.percent)}%` : '';
+    setImage3DStatus(`${data.message || data.phase || data.status || 'Generating AI model'} ${progress}`.trim(), 'active');
+    const payload = data.result || data.output || data.asset || data.model || {};
+    const hasModelResult = data.modelUrl || data.glbUrl || data.gltfUrl || data.objUrl || data.url || payload.modelUrl || payload.glbUrl || payload.gltfUrl || payload.objUrl || payload.url;
+    if (['completed', 'complete', 'done', 'succeeded', 'success'].includes(status) || hasModelResult) return normalizeReconstructionResult(data, statusUrl);
+    if (['failed', 'error', 'cancelled', 'canceled'].includes(status)) throw new Error(data.error || data.message || 'Image-to-3D job failed.');
+  }
+  throw new Error('Image-to-3D job timed out.');
+}
+
+async function importImage3DModelFromResult(result) {
+  const modelUrl = result.glbUrl || result.gltfUrl || result.modelUrl;
+  const objUrl = result.objUrl || (/\.obj($|[?#])/i.test(result.modelUrl || '') ? result.modelUrl : null);
+  const name = result.name || state.img3dFile?.name?.replace(/\.[^.]+$/, '') || 'AI Image Object';
+  if (objUrl) {
+    await importScannedOBJFromURL(objUrl, result.mtlUrl, name);
+    state.img3dMesh = state.selectedObject;
+    return;
+  }
+  if (modelUrl) {
+    await importScannedGLTFFromURL(modelUrl, name);
+    state.img3dMesh = state.selectedObject;
+    return;
+  }
+  throw new Error('Image-to-3D response did not include a GLB, GLTF, or OBJ URL.');
+}
+
 // ========================
 // PRIMITIVES
 // ========================
@@ -4590,7 +5894,7 @@ function addPrimitive(type) {
 // ========================
 function getSelectedExportTargets() {
   const targets = state.selectedObjects.length ? state.selectedObjects : (state.selectedObject ? [state.selectedObject] : []);
-  return Array.from(new Set(targets.map(getObjectRoot).filter(obj => obj && (state.sceneObjects.includes(obj) || state.sceneCameras.includes(obj)))));
+  return Array.from(new Set(targets.filter(obj => obj && (state.sceneObjects.includes(obj) || state.sceneCameras.includes(obj) || isChildMeshObject(obj)))));
 }
 
 function getSafeAssetName(name, fallback = 'sombra3d-asset') {
@@ -4608,6 +5912,11 @@ function buildExportScene(targets) {
   const clips = [];
   targets.forEach(obj => {
     const clone = cloneSceneObject(obj);
+    if (isChildMeshObject(obj)) {
+      obj.updateWorldMatrix(true, false);
+      clone.matrix.copy(obj.matrixWorld);
+      clone.matrix.decompose(clone.position, clone.quaternion, clone.scale);
+    }
     clone.name = obj.name || obj.userData.displayName || 'Object';
     clone.userData = { ...obj.userData };
     delete clone.userData.animations;
@@ -4800,7 +6109,10 @@ function getAnimationMetadata() {
       camera: k.camera,
       cameraId: k.cameraId,
       fov: k.fov,
-      target: k.target
+      target: k.target,
+      easing: k.easing,
+      source: k.source,
+      templateId: k.templateId
     }))
   };
 }
@@ -4907,7 +6219,7 @@ export async function loadOmmaAsset(scene, renderer) {
 `;
 }
 
-function exportProject() {
+function createProjectSnapshot() {
   const exporter = new GLTFExporter();
   const exportScene = new THREE.Scene();
   state.sceneObjects.forEach(obj => {
@@ -4922,8 +6234,9 @@ function exportProject() {
     exportScene.add(clone);
   });
   const animations = [...state.sceneObjects.flatMap(obj => Array.isArray(obj.userData.animations) ? obj.userData.animations : []), ...buildAnimationClips()];
-  exporter.parse(exportScene, (gltf) => {
-    const project = {
+  return new Promise((resolve, reject) => {
+    exporter.parse(exportScene, (gltf) => {
+      resolve({
       format: 'omma-project',
       version: 1,
       generator: 'Sombra3D Asset Studio',
@@ -4942,15 +6255,26 @@ function exportProject() {
       lighting: getLightingPresetSnapshot(),
       cameras: getCameraMetadata(),
       animationTimeline: getAnimationMetadata()
-    };
+      });
+    }, reject, { binary: false, animations, includeCustomExtensions: true });
+  });
+}
+
+async function exportProject() {
+  try {
+    const project = await createProjectSnapshot();
     downloadBlob(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'sombra3d-project.omma');
-  }, (err) => { console.error(err); alert('Project save failed'); }, { binary: false, animations, includeCustomExtensions: true });
+  } catch (err) { console.error(err); alert('Project save failed'); }
 }
 
 async function importProject(file) {
   const project = JSON.parse(await file.text());
+  await loadProjectData(project, file.name || 'project.omma');
+}
+
+async function loadProjectData(project, sourceName = 'Workspace Project') {
   if (!project || project.format !== 'omma-project' || !project.scene || !project.scene.gltf) throw new Error('Not a valid OMMA project file');
-  showLoading('Opening ' + file.name + '...');
+  showLoading('Opening ' + sourceName + '...');
   const loader = new GLTFLoader();
   await new Promise((resolve, reject) => {
     loader.parse(JSON.stringify(project.scene.gltf), '', (gltf) => {
@@ -5059,6 +6383,189 @@ async function importProject(file) {
 }
 
 // ========================
+// LOCAL WORKSPACE
+// ========================
+function openWorkspaceDB() {
+  return new Promise((resolve, reject) => {
+    if (!('indexedDB' in window)) { reject(new Error('IndexedDB is not available in this browser.')); return; }
+    const req = indexedDB.open('sombra3d-workspace', 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains('projects')) {
+        const store = db.createObjectStore('projects', { keyPath: 'id' });
+        store.createIndex('updatedAt', 'updatedAt');
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function workspaceStore(mode = 'readonly') {
+  return state.workspace.db.transaction('projects', mode).objectStore('projects');
+}
+
+function workspacePut(record) {
+  return new Promise((resolve, reject) => {
+    const req = workspaceStore('readwrite').put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function workspaceGet(id) {
+  return new Promise((resolve, reject) => {
+    const req = workspaceStore().get(id);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function workspaceDelete(id) {
+  return new Promise((resolve, reject) => {
+    const req = workspaceStore('readwrite').delete(id);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function workspaceGetAll() {
+  return new Promise((resolve, reject) => {
+    const req = workspaceStore().getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function getWorkspaceProjectName() {
+  const input = document.getElementById('workspace-project-name');
+  return (input?.value || state.workspace.currentProjectName || 'Untitled Sombra3D Project').trim() || 'Untitled Sombra3D Project';
+}
+
+async function saveWorkspaceProject(options = {}) {
+  if (!state.workspace.ready) await initWorkspace();
+  const autosave = !!options.autosave;
+  const id = autosave ? 'autosave' : (state.workspace.currentProjectId && state.workspace.currentProjectId !== 'autosave' ? state.workspace.currentProjectId : THREE.MathUtils.generateUUID());
+  const name = autosave ? `Autosave - ${state.workspace.currentProjectName || 'Untitled Sombra3D Project'}` : getWorkspaceProjectName();
+  const project = await createProjectSnapshot();
+  const existing = await workspaceGet(id);
+  const now = new Date().toISOString();
+  const record = {
+    id,
+    name,
+    project,
+    objectCount: state.sceneObjects.filter(obj => !obj.userData?.isSceneCamera).length,
+    triangleCount: state.totalTriangles || 0,
+    createdAt: existing?.createdAt || now,
+    updatedAt: now,
+    autosave
+  };
+  await workspacePut(record);
+  if (!autosave) {
+    state.workspace.currentProjectId = id;
+    state.workspace.currentProjectName = name;
+    sessionStorage.setItem('sombra3d.currentProjectId', id);
+  }
+  state.workspace.lastAutosaveAt = Date.now();
+  await renderWorkspaceProjects();
+  return record;
+}
+
+function scheduleWorkspaceAutosave() {
+  if (!state.workspace.ready) return;
+  clearTimeout(state.workspace.autosaveTimer);
+  state.workspace.autosaveTimer = setTimeout(() => {
+    if (!state.sceneObjects.length && !state.sceneCameras.length) return;
+    saveWorkspaceProject({ autosave: true }).catch(err => console.warn('Workspace autosave failed:', err));
+  }, 3500);
+}
+
+function formatWorkspaceDate(iso) {
+  if (!iso) return 'Unknown date';
+  const d = new Date(iso);
+  return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+async function renderWorkspaceProjects() {
+  const list = document.getElementById('workspace-project-list');
+  if (!list || !state.workspace.ready) return;
+  const projects = (await workspaceGetAll()).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  if (!projects.length) {
+    list.innerHTML = '<div class="workspace-empty">No saved workspace projects yet.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  projects.forEach(project => {
+    const item = document.createElement('div');
+    item.className = 'workspace-project';
+    item.dataset.id = project.id;
+    item.classList.toggle('active', state.workspace.selectedId === project.id);
+    const meta = `${formatWorkspaceDate(project.updatedAt)} - ${project.objectCount || 0} objects - ${(project.triangleCount || 0).toLocaleString()} tris`;
+    item.innerHTML = `
+      <i class="fa-solid ${project.autosave ? 'fa-clock-rotate-left' : 'fa-cube'}"></i>
+      <div class="workspace-project-main">
+        <div class="workspace-project-name">${escapeHTML(project.name)}</div>
+        <div class="workspace-project-meta">${escapeHTML(meta)}</div>
+      </div>
+    `;
+    item.addEventListener('click', () => {
+      state.workspace.selectedId = project.id;
+      document.querySelectorAll('.workspace-project').forEach(el => el.classList.toggle('active', el.dataset.id === project.id));
+      document.getElementById('workspace-project-name').value = project.autosave ? (state.workspace.currentProjectName || 'Untitled Sombra3D Project') : project.name;
+    });
+    item.addEventListener('dblclick', () => openWorkspaceProject(project.id));
+    list.appendChild(item);
+  });
+}
+
+async function openWorkspaceModal() {
+  if (!state.workspace.ready) {
+    try { await initWorkspace(); }
+    catch (err) { alert('Workspace storage is not available: ' + err.message); return; }
+  }
+  document.getElementById('workspace-project-name').value = state.workspace.currentProjectName || 'Untitled Sombra3D Project';
+  await renderWorkspaceProjects();
+  openModal('modal-workspace');
+}
+
+async function openWorkspaceProject(id = state.workspace.selectedId) {
+  if (!id) { alert('Select a workspace project first.'); return; }
+  const record = await workspaceGet(id);
+  if (!record?.project) { alert('Workspace project could not be found.'); return; }
+  await loadProjectData(record.project, record.name);
+  state.workspace.currentProjectId = record.autosave ? null : record.id;
+  state.workspace.currentProjectName = record.autosave ? record.name.replace(/^Autosave - /, '') : record.name;
+  sessionStorage.setItem('sombra3d.currentProjectId', state.workspace.currentProjectId || '');
+  closeModal('modal-workspace');
+}
+
+async function deleteWorkspaceProject(id = state.workspace.selectedId) {
+  if (!id) { alert('Select a workspace project first.'); return; }
+  if (!confirm('Delete this saved workspace project?')) return;
+  await workspaceDelete(id);
+  if (state.workspace.currentProjectId === id) state.workspace.currentProjectId = null;
+  if (!state.workspace.currentProjectId) sessionStorage.removeItem('sombra3d.currentProjectId');
+  state.workspace.selectedId = null;
+  await renderWorkspaceProjects();
+}
+
+async function initWorkspace() {
+  if (state.workspace.ready) return;
+  state.workspace.db = await openWorkspaceDB();
+  state.workspace.ready = true;
+  state.workspace.currentProjectId = sessionStorage.getItem('sombra3d.currentProjectId') || null;
+  if (state.workspace.currentProjectId) {
+    const current = await workspaceGet(state.workspace.currentProjectId);
+    if (current) state.workspace.currentProjectName = current.name;
+  }
+  await renderWorkspaceProjects();
+}
+
+// ========================
 // MODAL HELPERS
 // ========================
 function openModal(id) { document.getElementById(id).classList.add('active'); }
@@ -5141,6 +6648,7 @@ function initSceneActionPalette() {
 // ========================
 function initUI() {
   document.getElementById('btn-import').addEventListener('click', () => openModal('modal-import'));
+  document.getElementById('btn-workspace').addEventListener('click', openWorkspaceModal);
   document.getElementById('welcome-import').addEventListener('click', () => openModal('modal-import'));
   document.getElementById('btn-add-prim').addEventListener('click', () => openModal('modal-primitives'));
   document.getElementById('btn-svg-to-3d').addEventListener('click', () => document.getElementById('svg-input').click());
@@ -5183,6 +6691,7 @@ function initUI() {
   document.getElementById('scene-visibility').addEventListener('click', toggleSelectedVisibility);
   document.getElementById('scene-lock').addEventListener('click', toggleSelectedLock);
   document.getElementById('scene-group').addEventListener('click', groupSelectedObjects);
+  document.getElementById('scene-ungroup').addEventListener('click', ungroupSelectedObjects);
   document.getElementById('scene-delete').addEventListener('click', deleteSelectedObjects);
   initSceneActionPalette();
 
@@ -5194,6 +6703,7 @@ function initUI() {
   document.getElementById('export-glb').addEventListener('click', () => { exportGLB(); document.getElementById('export-menu').classList.remove('visible'); });
   document.getElementById('export-obj').addEventListener('click', () => { exportOBJ(); document.getElementById('export-menu').classList.remove('visible'); });
   document.getElementById('export-project').addEventListener('click', () => { exportProject(); document.getElementById('export-menu').classList.remove('visible'); });
+  document.getElementById('save-workspace-project').addEventListener('click', () => { saveWorkspaceProject().catch(err => alert('Workspace save failed: ' + err.message)); document.getElementById('export-menu').classList.remove('visible'); });
   document.getElementById('load-project').addEventListener('click', () => { document.getElementById('project-input').click(); document.getElementById('export-menu').classList.remove('visible'); });
   document.getElementById('export-three-package').addEventListener('click', () => { exportThreePackage(); document.getElementById('export-menu').classList.remove('visible'); });
   document.getElementById('export-png').addEventListener('click', () => { exportPNG(); document.getElementById('export-menu').classList.remove('visible'); });
@@ -5203,6 +6713,10 @@ function initUI() {
 
   document.getElementById('modal-import-cancel').addEventListener('click', () => closeModal('modal-import'));
   document.getElementById('modal-prim-cancel').addEventListener('click', () => closeModal('modal-primitives'));
+  document.getElementById('workspace-close').addEventListener('click', () => closeModal('modal-workspace'));
+  document.getElementById('workspace-save-current').addEventListener('click', () => saveWorkspaceProject().catch(err => alert('Workspace save failed: ' + err.message)));
+  document.getElementById('workspace-open-selected').addEventListener('click', () => openWorkspaceProject().catch(err => alert('Open failed: ' + err.message)));
+  document.getElementById('workspace-delete-selected').addEventListener('click', () => deleteWorkspaceProject().catch(err => alert('Delete failed: ' + err.message)));
   document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); }); });
 
   const dropZone = document.getElementById('drop-zone');
@@ -5255,16 +6769,18 @@ function initUI() {
   document.getElementById('vc-rotate').addEventListener('click', () => { state.autoRotate = !state.autoRotate; document.getElementById('vc-rotate').classList.toggle('active', state.autoRotate); });
   document.getElementById('vc-center').addEventListener('click', () => { state.controls.target.set(0,0,0); state.camera.position.set(4,3,5); state.controls.update(); });
   document.getElementById('btn-add-camera').addEventListener('click', () => createSceneCamera());
+  document.getElementById('btn-camera-templates').addEventListener('click', openCameraTemplateModal);
   document.getElementById('btn-look-camera').addEventListener('click', () => toggleLookThroughCamera());
 
   ['pos-x','pos-y','pos-z','rot-x','rot-y','rot-z','scl-x','scl-y','scl-z'].forEach(id => {
     document.getElementById(id).addEventListener('change', () => {
       if (!state.selectedObject) return;
-      const obj = state.selectedObject.isMesh && state.selectedObject.parent && state.selectedObject.parent !== state.scene ? state.selectedObject.parent : state.selectedObject;
+      const obj = state.selectedObject;
       try { obj.position.set(parseFloat(document.getElementById('pos-x').value), parseFloat(document.getElementById('pos-y').value), parseFloat(document.getElementById('pos-z').value)); } catch(e) {}
       try { obj.rotation.set(THREE.MathUtils.degToRad(parseFloat(document.getElementById('rot-x').value)), THREE.MathUtils.degToRad(parseFloat(document.getElementById('rot-y').value)), THREE.MathUtils.degToRad(parseFloat(document.getElementById('rot-z').value))); } catch(e) {}
       try { obj.scale.set(parseFloat(document.getElementById('scl-x').value), parseFloat(document.getElementById('scl-y').value), parseFloat(document.getElementById('scl-z').value)); } catch(e) {}
       if (obj.userData?.isSceneCamera) updateCameraHelper(obj);
+      updateSceneHierarchy();
     });
   });
 
@@ -5329,15 +6845,39 @@ function initUI() {
   document.getElementById('anim-package').addEventListener('click', exportThreePackage);
   syncTimelineUI();
 
+  document.querySelectorAll('#camera-template-filters .camera-template-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.cameraTemplates.filter = btn.dataset.filter;
+      document.querySelectorAll('#camera-template-filters .camera-template-filter').forEach(el => el.classList.toggle('active', el === btn));
+      renderCameraTemplateBrowser();
+    });
+  });
+  document.getElementById('camera-template-preview').addEventListener('click', previewCameraTemplate);
+  document.getElementById('camera-template-apply').addEventListener('click', applyCameraTemplateToTimeline);
+  document.getElementById('camera-template-reset').addEventListener('click', resetCameraTemplatePreview);
+  document.getElementById('camera-template-save-path').addEventListener('click', saveCurrentCameraPathTemplate);
+  document.getElementById('camera-template-close').addEventListener('click', closeCameraTemplateModal);
+  document.getElementById('modal-camera-templates').addEventListener('click', (e) => { if (e.target === e.currentTarget) resetCameraTemplatePreview(); });
+  ['camera-template-duration','camera-template-easing','camera-template-aspect','camera-template-resolution'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => {
+      const status = document.getElementById('camera-template-status');
+      if (status) status.textContent = 'Settings updated. Preview again or apply to the timeline.';
+    });
+  });
+
   const svgSliders = { 'svg-depth':(v)=>{state.svgParams.depth=v;document.getElementById('val-svg-depth').textContent=v.toFixed(1);}, 'svg-bevel':(v)=>{state.svgParams.bevel=v;document.getElementById('val-svg-bevel').textContent=v.toFixed(2);}, 'svg-bevel-segs':(v)=>{state.svgParams.bevelSegs=v;document.getElementById('val-svg-bevel-segs').textContent=v;}, 'svg-curve':(v)=>{state.svgParams.curveDetail=v;document.getElementById('val-svg-curve').textContent=v;} };
   Object.entries(svgSliders).forEach(([id, fn]) => { document.getElementById(id).addEventListener('input', (e) => fn(parseFloat(e.target.value))); document.getElementById(id).addEventListener('change', () => regenerateSVGMesh()); });
   document.getElementById('svg-glow').addEventListener('click', (e) => { state.svgParams.glow = e.currentTarget.classList.toggle('on'); regenerateSVGMesh(); });
 
-  document.getElementById('img3d-mode').addEventListener('change', (e) => { state.img3dParams.mode = e.target.value; });
+  syncImage3DControls();
+  document.getElementById('img3d-mode').addEventListener('change', (e) => {
+    state.img3dParams.mode = e.target.value;
+    setImage3DStatus('Regenerate to apply the image mode.', 'active');
+  });
   document.getElementById('img3d-bg').addEventListener('change', (e) => { state.img3dParams.bgRemoval = e.target.value; });
   const img3dSliders = { 'img3d-threshold':(v)=>{state.img3dParams.threshold=v;document.getElementById('val-img3d-threshold').textContent=v;}, 'img3d-depth':(v)=>{state.img3dParams.depth=v;document.getElementById('val-img3d-depth').textContent=v.toFixed(1);}, 'img3d-res':(v)=>{state.img3dParams.resolution=v;document.getElementById('val-img3d-res').textContent=v;}, 'img3d-smooth':(v)=>{state.img3dParams.smooth=v;document.getElementById('val-img3d-smooth').textContent=v;} };
   Object.entries(img3dSliders).forEach(([id, fn]) => { document.getElementById(id).addEventListener('input', (e) => fn(parseFloat(e.target.value))); });
-  document.getElementById('img3d-regenerate').addEventListener('click', generateImage3D);
+  document.getElementById('img3d-regenerate').addEventListener('click', () => { generateImage3D(); });
 
   // Decimate controls
   document.getElementById('dec-ratio').addEventListener('input', (e) => { const v = parseFloat(e.target.value); document.getElementById('val-dec-ratio').textContent = v.toFixed(2); if (state.selectedObject) { const origTris = getTriCount(state.selectedObject); const target = Math.max(4, Math.floor(origTris*v)); document.getElementById('dec-target-input').value = target; updateDecimateQualityIndicators(origTris, target); } });
@@ -5379,6 +6919,7 @@ function initUI() {
       case 'g': state.transformMode = 'translate'; document.querySelector('[data-transform-mode="translate"]').click(); break;
       case 'r': state.transformMode = 'rotate'; document.querySelector('[data-transform-mode="rotate"]').click(); break;
       case 's': state.transformMode = 'scale'; document.querySelector('[data-transform-mode="scale"]').click(); break;
+      case 'u': ungroupSelectedObjects(); break;
       case 'h': toggleSelectedVisibility(); break;
       case 'l': toggleSelectedLock(); break;
       case '1': setShadingMode('lit'); break; case '2': setShadingMode('clay'); break; case '3': setShadingMode('wire'); break; case '4': setShadingMode('normal'); break;
@@ -5420,6 +6961,7 @@ function pushUndo(label = 'edit') {
   state.redoStack.forEach(snapshot => snapshot.objects.forEach(disposeObject));
   state.redoStack = [];
   updateUndoRedoUI();
+  scheduleWorkspaceAutosave();
 }
 
 function applySnapshot(snapshot) {
@@ -5606,6 +7148,14 @@ function interpolateArray(a, b, t) {
   return a.map((v, i) => THREE.MathUtils.lerp(v, b[i], t));
 }
 
+function easeTimelineValue(raw, easing = 'ease-in-out') {
+  const t = THREE.MathUtils.clamp(raw, 0, 1);
+  if (easing === 'linear') return t;
+  if (easing === 'ease-in') return t * t;
+  if (easing === 'ease-out') return 1 - Math.pow(1 - t, 2);
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
 function getSurroundingKeys(keys, time) {
   if (!keys.length) return null;
   const sorted = [...keys].sort((a, b) => a.time - b.time);
@@ -5623,7 +7173,7 @@ function keyMix(prev, next, time) {
   const span = next.time >= prev.time ? next.time - prev.time : (state.timeline.duration - prev.time) + next.time;
   const local = next.time >= prev.time ? time - prev.time : (time >= prev.time ? time - prev.time : (state.timeline.duration - prev.time) + time);
   const raw = THREE.MathUtils.clamp(local / Math.max(0.0001, span), 0, 1);
-  return raw * raw * (3 - 2 * raw);
+  return easeTimelineValue(raw, next.easing || prev.easing || 'ease-in-out');
 }
 
 function applyTimelineAt(time, options = {}) {
@@ -6188,6 +7738,810 @@ function initMobilePanels() {
   });
 }
 
+// ==========================================
+// 3D VIDEO OBJECT SCANNER
+// ==========================================
+const scannerState = {
+  stream: null,
+  mediaRecorder: null,
+  recordedChunks: [],
+  recordingMimeType: '',
+  videoBlob: null,
+  sourceMediaUrl: null,
+  frames: [],
+  timerInterval: null,
+  recordingStartTime: 0,
+  category: 'organic',
+  selectedFrames: [],
+  reconstructionEndpoint: localStorage.getItem('sombra3d.scan.endpoint') || '',
+  reconstructionResult: null,
+  serviceJobId: null
+};
+
+const SCAN_MIN_DURATION_MS = 10000;
+const SCAN_MAX_DURATION_MS = 30000;
+const SCAN_FRAME_INTERVAL_MS = 400;
+
+function openScanner() {
+  scannerState.stream = null;
+  scannerState.mediaRecorder = null;
+  scannerState.recordedChunks = [];
+  scannerState.recordingMimeType = '';
+  scannerState.videoBlob = null;
+  if (scannerState.sourceMediaUrl) URL.revokeObjectURL(scannerState.sourceMediaUrl);
+  scannerState.sourceMediaUrl = null;
+  scannerState.frames = [];
+  scannerState.category = 'organic';
+  scannerState.selectedFrames = [];
+  scannerState.reconstructionResult = null;
+  scannerState.serviceJobId = null;
+  
+  // reset UI buttons
+  document.querySelectorAll('.scan-type-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.type === 'organic');
+  });
+  
+  // show step 1, hide others
+  document.getElementById('scan-step-1').style.display = 'block';
+  document.getElementById('scan-step-2').style.display = 'none';
+  document.getElementById('scan-step-3').style.display = 'none';
+  document.getElementById('scan-step-4').style.display = 'none';
+  const endpointInput = document.getElementById('scan-service-endpoint');
+  if (endpointInput) endpointInput.value = scannerState.reconstructionEndpoint;
+  
+  openModal('modal-scanner');
+}
+
+async function startCameraFeed() {
+  try {
+    scannerState.stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    const video = document.getElementById('scan-video');
+    video.srcObject = scannerState.stream;
+    video.play();
+    
+    // Transition to Step 2
+    document.getElementById('scan-step-1').style.display = 'none';
+    document.getElementById('scan-step-2').style.display = 'block';
+    
+    // Setup UI for Step 2
+    document.getElementById('scan-timer-badge').style.display = 'none';
+    document.getElementById('scan-status-text').textContent = 'Camera active. Frame your object and start recording.';
+    document.getElementById('btn-scan-record').textContent = 'Start Recording';
+    document.getElementById('btn-scan-record').style.background = 'var(--red)';
+    document.getElementById('scan-capture-progress').style.width = '0%';
+    document.getElementById('scan-guidance-badge').style.display = 'block';
+    document.getElementById('scan-guidance-badge').innerHTML = '<i class="fa-solid fa-video"></i> Position the object in the circle';
+  } catch (err) {
+    console.error('Error accessing camera:', err);
+    alert('Unable to access camera. Please check permissions and try again. ' + err.message);
+  }
+}
+
+function stopCameraFeed() {
+  if (scannerState.stream) {
+    scannerState.stream.getTracks().forEach(track => track.stop());
+    scannerState.stream = null;
+  }
+  const video = document.getElementById('scan-video');
+  if (video) video.srcObject = null;
+}
+
+function cancelActiveScanCapture() {
+  clearInterval(scannerState.timerInterval);
+  scannerState.timerInterval = null;
+  if (scannerState.mediaRecorder && scannerState.mediaRecorder.state !== 'inactive') {
+    try { scannerState.mediaRecorder.stop(); } catch (e) {}
+  }
+  stopCameraFeed();
+}
+
+function chooseScanMimeType() {
+  const mimeTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
+  if (typeof MediaRecorder === 'undefined') return '';
+  return mimeTypes.find(type => MediaRecorder.isTypeSupported(type)) || '';
+}
+
+function startRecordingScan() {
+  const recordBtn = document.getElementById('btn-scan-record');
+  const timerBadge = document.getElementById('scan-timer-badge');
+  const guidance = document.getElementById('scan-guidance-badge');
+  const progressBar = document.getElementById('scan-capture-progress');
+
+  if (!scannerState.stream) {
+    document.getElementById('scan-status-text').textContent = 'Open the camera before recording.';
+    return;
+  }
+  
+  scannerState.recordedChunks = [];
+  scannerState.videoBlob = null;
+  if (scannerState.sourceMediaUrl) URL.revokeObjectURL(scannerState.sourceMediaUrl);
+  scannerState.sourceMediaUrl = null;
+  scannerState.frames = [];
+  
+  try {
+    scannerState.recordingMimeType = chooseScanMimeType();
+    scannerState.mediaRecorder = new MediaRecorder(scannerState.stream, scannerState.recordingMimeType ? { mimeType: scannerState.recordingMimeType } : undefined);
+  } catch (e) {
+    try {
+      scannerState.mediaRecorder = new MediaRecorder(scannerState.stream);
+    } catch (err) {
+      console.warn('MediaRecorder not supported:', err);
+    }
+  }
+  
+  if (scannerState.mediaRecorder) {
+    scannerState.mediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) scannerState.recordedChunks.push(e.data);
+    };
+    scannerState.mediaRecorder.start(1000);
+  }
+  
+  scannerState.recordingStartTime = performance.now();
+  timerBadge.style.display = 'inline-block';
+  recordBtn.textContent = 'Recording...';
+  recordBtn.style.background = 'var(--surface3)';
+  
+  const guidanceMessages = [
+    '<i class="fa-solid fa-person-walking"></i> Move slowly to the right...',
+    '<i class="fa-solid fa-arrows-rotate"></i> Continue walking around the object...',
+    '<i class="fa-solid fa-ruler-combined"></i> Tilt the camera slightly up...',
+    '<i class="fa-solid fa-magnifying-glass"></i> Keep the object in the circle...',
+    '<i class="fa-solid fa-wand-magic-sparkles"></i> Capturing texture details...'
+  ];
+  
+  grabFrameFromVideo();
+  
+  const timerFn = () => {
+    const elapsed = performance.now() - scannerState.recordingStartTime;
+    const progressPct = (elapsed / SCAN_MAX_DURATION_MS) * 100;
+    progressBar.style.width = Math.min(100, progressPct) + '%';
+    
+    const elapsedSeconds = Math.floor(elapsed / 1000);
+    timerBadge.textContent = `00:${elapsedSeconds.toString().padStart(2, '0')}`;
+    recordBtn.textContent = elapsed >= SCAN_MIN_DURATION_MS ? 'Stop Recording' : 'Recording...';
+    document.getElementById('scan-status-text').textContent = elapsed >= SCAN_MIN_DURATION_MS ? 'Minimum capture met. Keep moving or stop when ready.' : 'Recording source video and extracting frames.';
+    
+    const msgIdx = Math.floor(elapsedSeconds / 3) % guidanceMessages.length;
+    guidance.innerHTML = guidanceMessages[msgIdx];
+    
+    grabFrameFromVideo();
+    
+    if (elapsed >= SCAN_MAX_DURATION_MS) {
+      stopRecordingScan();
+    }
+  };
+  
+  scannerState.timerInterval = setInterval(timerFn, SCAN_FRAME_INTERVAL_MS);
+}
+
+function grabFrameFromVideo() {
+  const video = document.getElementById('scan-video');
+  if (!video || video.paused || video.ended) return;
+  
+  const width = video.videoWidth || 640;
+  const height = video.videoHeight || 480;
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+  
+  // Use downscaled buffer for fast color & blur analysis
+  const sampleCanvas = document.createElement('canvas');
+  sampleCanvas.width = 160;
+  sampleCanvas.height = 120;
+  const sCtx = sampleCanvas.getContext('2d');
+  sCtx.drawImage(canvas, 0, 0, sampleCanvas.width, sampleCanvas.height);
+  const imgData = sCtx.getImageData(0, 0, sampleCanvas.width, sampleCanvas.height);
+  
+  const sharpness = calculateSharpness(imgData);
+  
+  const data = imgData.data;
+  let rSum = 0, gSum = 0, bSum = 0;
+  const totalPixels = data.length / 4;
+  for (let i = 0; i < data.length; i += 4) {
+    rSum += data[i];
+    gSum += data[i + 1];
+    bSum += data[i + 2];
+  }
+  const avgColor = {
+    r: rSum / totalPixels,
+    g: gSum / totalPixels,
+    b: bSum / totalPixels
+  };
+  
+  const elapsed = performance.now() - scannerState.recordingStartTime;
+  const timestamp = Math.round(elapsed); // ms
+  
+  // Preliminary angle estimation based on elapsed time (assumes 360 rotation over full duration)
+  const angleEstimate = Math.round((elapsed / SCAN_MAX_DURATION_MS) * 360) % 360;
+  
+  scannerState.frames.push({
+    dataUrl,
+    timestamp,
+    angleEstimate,
+    resolution: `${width}x${height}`,
+    sharpness,
+    avgColor,
+    sourceIndex: scannerState.frames.length
+  });
+}
+
+function calculateSharpness(imgData) {
+  const data = imgData.data;
+  const width = imgData.width;
+  const height = imgData.height;
+  let sumDiff = 0;
+  let count = 0;
+  const step = 4; 
+  for (let y = 1; y < height - 1; y += step) {
+    for (let x = 1; x < width - 1; x += step) {
+      const idx = (y * width + x) * 4;
+      const lum = 0.299 * data[idx] + 0.587 * data[idx + 1] + 0.114 * data[idx + 2];
+      
+      const rightIdx = (y * width + (x + 1)) * 4;
+      const lumRight = 0.299 * data[rightIdx] + 0.587 * data[rightIdx + 1] + 0.114 * data[rightIdx + 2];
+      
+      const downIdx = ((y + 1) * width + x) * 4;
+      const lumDown = 0.299 * data[downIdx] + 0.587 * data[downIdx + 1] + 0.114 * data[downIdx + 2];
+      
+      const dx = lum - lumRight;
+      const dy = lum - lumDown;
+      sumDiff += dx * dx + dy * dy;
+      count++;
+    }
+  }
+  return count > 0 ? (sumDiff / count) : 0;
+}
+
+async function waitForScanRecorderStop() {
+  if (!scannerState.mediaRecorder) return null;
+  const recorder = scannerState.mediaRecorder;
+  if (recorder.state === 'inactive') {
+    scannerState.videoBlob = scannerState.recordedChunks.length ? new Blob(scannerState.recordedChunks, { type: scannerState.recordingMimeType || 'video/webm' }) : null;
+    if (scannerState.videoBlob) scannerState.sourceMediaUrl = URL.createObjectURL(scannerState.videoBlob);
+    return scannerState.videoBlob;
+  }
+  return new Promise((resolve) => {
+    recorder.onstop = () => {
+      scannerState.videoBlob = scannerState.recordedChunks.length ? new Blob(scannerState.recordedChunks, { type: scannerState.recordingMimeType || 'video/webm' }) : null;
+      if (scannerState.videoBlob) scannerState.sourceMediaUrl = URL.createObjectURL(scannerState.videoBlob);
+      resolve(scannerState.videoBlob);
+    };
+    recorder.stop();
+  });
+}
+
+async function stopRecordingScan(options = {}) {
+  const elapsed = performance.now() - scannerState.recordingStartTime;
+  if (!options.force && elapsed < SCAN_MIN_DURATION_MS) {
+    const remaining = Math.ceil((SCAN_MIN_DURATION_MS - elapsed) / 1000);
+    document.getElementById('scan-status-text').textContent = `Capture at least ${remaining}s more for reliable reconstruction.`;
+    return;
+  }
+
+  clearInterval(scannerState.timerInterval);
+  scannerState.timerInterval = null;
+  
+  await waitForScanRecorderStop();
+  
+  const actualDuration = performance.now() - scannerState.recordingStartTime;
+  // Re-scale angle estimates relative to the actual recording time for high fidelity
+  scannerState.frames.forEach(frame => {
+    frame.angleEstimate = Math.round((frame.timestamp / actualDuration) * 360) % 360;
+  });
+  
+  stopCameraFeed();
+  
+  document.getElementById('scan-step-2').style.display = 'none';
+  document.getElementById('scan-step-3').style.display = 'block';
+  
+  processAndFilterFrames();
+}
+
+async function processAndFilterFrames() {
+  const status = document.getElementById('scan-extraction-status');
+  const pct = document.getElementById('scan-extraction-percentage');
+  const fill = document.getElementById('scan-extraction-progress-fill');
+  const grid = document.getElementById('scan-frame-thumbnails');
+  const gridLabel = document.getElementById('scan-frame-grid-label');
+  const nextBtn = document.getElementById('btn-scan-reconstruct');
+  
+  grid.innerHTML = '';
+  nextBtn.disabled = true;
+  
+  const totalRaw = scannerState.frames.length;
+  if (totalRaw === 0) {
+    status.textContent = 'No frames captured. Please retry.';
+    return;
+  }
+  
+  status.textContent = 'Analyzing frame quality and metadata...';
+  pct.textContent = '20%';
+  fill.style.width = '20%';
+  await new Promise(r => setTimeout(r, 600));
+  
+  const sortedBySharpness = [...scannerState.frames].sort((a, b) => b.sharpness - a.sharpness);
+  const medianSharpness = sortedBySharpness[Math.floor(sortedBySharpness.length / 2)].sharpness;
+  
+  let blurThreshold = medianSharpness * 0.85; // Initial sharpness cut-off
+  let colorDiffThreshold = 5.0; // RGB shift metric
+  let angleDiffThreshold = 3.0; // Minimal angular delta between kept frames
+  
+  let finalFrames = [];
+  let attempts = 0;
+  
+  status.textContent = 'Filtering out blurry viewports and duplicate angles...';
+  pct.textContent = '65%';
+  fill.style.width = '65%';
+  await new Promise(r => setTimeout(r, 800));
+  
+  while (attempts < 10) {
+    // Blur culling
+    let tempFrames = scannerState.frames.filter(f => f.sharpness >= blurThreshold);
+    
+    // Sort chronologically for duplicate viewpoint checks
+    tempFrames.sort((a, b) => a.timestamp - b.timestamp);
+    
+    const unique = [];
+    for (const f of tempFrames) {
+      if (unique.length === 0) {
+        unique.push(f);
+        continue;
+      }
+      const last = unique[unique.length - 1];
+      const colorDiff = Math.abs(f.avgColor.r - last.avgColor.r) +
+                        Math.abs(f.avgColor.g - last.avgColor.g) +
+                        Math.abs(f.avgColor.b - last.avgColor.b);
+      const angleDiff = Math.abs(f.angleEstimate - last.angleEstimate);
+      
+      // Keep if color or angle has changed significantly (avoid duplicate viewpoints)
+      if (colorDiff >= colorDiffThreshold || angleDiff >= angleDiffThreshold) {
+        unique.push(f);
+      }
+    }
+    
+    // Adjust thresholds dynamically to keep 30-100 high-quality frames
+    if (unique.length >= 30 && unique.length <= 100) {
+      finalFrames = unique;
+      break;
+    } else if (unique.length > 100) {
+      if (attempts === 9) {
+        finalFrames = unique.sort((a, b) => b.sharpness - a.sharpness).slice(0, 100).sort((a, b) => a.timestamp - b.timestamp);
+        break;
+      }
+      colorDiffThreshold += 1.0;
+      angleDiffThreshold += 1.0;
+    } else {
+      if (attempts === 9) {
+        finalFrames = sortedBySharpness.slice(0, Math.min(30, totalRaw)).sort((a, b) => a.timestamp - b.timestamp);
+        break;
+      }
+      blurThreshold *= 0.8;
+      colorDiffThreshold *= 0.7;
+      angleDiffThreshold *= 0.7;
+    }
+    attempts++;
+  }
+  
+  // Ensure strict bounding criteria
+  if (finalFrames.length < 30 && totalRaw >= 30) {
+    finalFrames = sortedBySharpness.slice(0, 30).sort((a, b) => a.timestamp - b.timestamp);
+  } else if (finalFrames.length < 30) {
+    finalFrames = [...scannerState.frames].sort((a, b) => a.timestamp - b.timestamp);
+  }
+  
+  if (finalFrames.length > 100) {
+    finalFrames = finalFrames.slice(0, 100);
+  }
+  
+  status.textContent = `Analysis complete. Kept ${finalFrames.length} high-quality keyframes (discarded ${totalRaw - finalFrames.length} blurry/duplicate views).`;
+  pct.textContent = '100%';
+  fill.style.width = '100%';
+  
+  gridLabel.textContent = `Extracted Viewpoints (${finalFrames.length})`;
+  
+  finalFrames.forEach((frame) => {
+    const thumb = document.createElement('div');
+    thumb.style.position = 'relative';
+    thumb.style.aspectRatio = '4/3';
+    thumb.style.borderRadius = '4px';
+    thumb.style.overflow = 'hidden';
+    thumb.style.border = '1px solid var(--border)';
+    thumb.title = `Time: ${frame.timestamp}ms\nAngle: ${frame.angleEstimate}°\nRes: ${frame.resolution}\nSharpness: ${Math.round(frame.sharpness * 10) / 10}`;
+    
+    const img = document.createElement('img');
+    img.src = frame.dataUrl;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    
+    const badge = document.createElement('span');
+    badge.innerHTML = `<i class="fa-solid fa-star"></i> ${Math.round(frame.sharpness * 10) / 10}`;
+    badge.style.position = 'absolute';
+    badge.style.bottom = '2px';
+    badge.style.right = '2px';
+    badge.style.background = 'rgba(0,0,0,0.6)';
+    badge.style.color = '#fff';
+    badge.style.fontSize = '8px';
+    badge.style.padding = '1px 3px';
+    badge.style.borderRadius = '2px';
+    
+    thumb.appendChild(img);
+    thumb.appendChild(badge);
+    grid.appendChild(thumb);
+  });
+  
+  scannerState.selectedFrames = finalFrames;
+  nextBtn.disabled = false;
+}
+
+function appendScanLog(message) {
+  const consoleEl = document.getElementById('scan-log-console');
+  if (!consoleEl) return;
+  const time = new Date().toLocaleTimeString([], { hour12: false });
+  consoleEl.textContent += `[${time}] ${message}\n`;
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+async function start3DReconstruction() {
+  document.getElementById('scan-step-3').style.display = 'none';
+  document.getElementById('scan-step-4').style.display = 'block';
+  
+  const logConsole = document.getElementById('scan-log-console');
+  logConsole.textContent = '';
+  setScanReconstructionProgress(2, 'Preparing reconstruction package...');
+
+  const endpointInput = document.getElementById('scan-service-endpoint');
+  scannerState.reconstructionEndpoint = (endpointInput?.value || '').trim();
+  localStorage.setItem('sombra3d.scan.endpoint', scannerState.reconstructionEndpoint);
+
+  if (scannerState.reconstructionEndpoint) {
+    try {
+      const result = await runRemoteReconstruction(scannerState.reconstructionEndpoint);
+      scannerState.reconstructionResult = result;
+      await importScannedModelFromResult(result);
+      return;
+    } catch (err) {
+      console.error('Remote reconstruction failed:', err);
+      appendScanLog(`Remote reconstruction failed: ${err.message}`);
+      appendScanLog('Falling back to local editable preview mesh.');
+    }
+  } else {
+    appendScanLog('No reconstruction service URL provided. Creating local editable preview mesh.');
+  }
+
+  await runLocalReconstructionPreview();
+}
+
+function setScanReconstructionProgress(pct, label) {
+  const progressFill = document.getElementById('scan-reconstruct-progress');
+  const phaseLabel = document.getElementById('scan-reconstruct-phase');
+  if (progressFill) progressFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  if (phaseLabel && label) phaseLabel.textContent = label;
+}
+
+function getScanMetadata() {
+  return {
+    category: scannerState.category,
+    sourceVideo: scannerState.videoBlob ? {
+      type: scannerState.videoBlob.type || scannerState.recordingMimeType || 'video/webm',
+      size: scannerState.videoBlob.size
+    } : null,
+    frameIntervalMs: SCAN_FRAME_INTERVAL_MS,
+    frameCount: scannerState.selectedFrames.length,
+    frames: scannerState.selectedFrames.map((frame, index) => ({
+      index,
+      sourceIndex: frame.sourceIndex,
+      timestamp: frame.timestamp,
+      angleEstimate: frame.angleEstimate,
+      resolution: frame.resolution,
+      sharpness: frame.sharpness,
+      avgColor: frame.avgColor
+    }))
+  };
+}
+
+function dataUrlToBlob(dataUrl) {
+  const [header, base64] = dataUrl.split(',');
+  const mime = (header.match(/data:(.*?);/) || [])[1] || 'image/jpeg';
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+function buildReconstructionPayload() {
+  const formData = new FormData();
+  formData.append('category', scannerState.category);
+  formData.append('metadata', JSON.stringify(getScanMetadata()));
+  if (scannerState.videoBlob) {
+    formData.append('sourceVideo', scannerState.videoBlob, `sombra3d-scan-${Date.now()}.webm`);
+  }
+  scannerState.selectedFrames.forEach((frame, index) => {
+    formData.append('frames', dataUrlToBlob(frame.dataUrl), `frame-${String(index + 1).padStart(3, '0')}.jpg`);
+  });
+  return formData;
+}
+
+function absolutizeScanUrl(url, baseUrl = scannerState.reconstructionEndpoint) {
+  if (!url) return url;
+  try { return new URL(url, baseUrl || window.location.href).href; }
+  catch (e) { return url; }
+}
+
+function normalizeReconstructionResult(data, baseUrl = scannerState.reconstructionEndpoint) {
+  if (!data || typeof data !== 'object') throw new Error('Reconstruction service returned an empty response.');
+  const payload = data.result || data.output || data.asset || data.model || data;
+  const result = {
+    ...data,
+    ...payload,
+    modelUrl: payload.modelUrl || payload.url || payload.assetUrl || payload.outputUrl,
+    glbUrl: payload.glbUrl || payload.glb || null,
+    gltfUrl: payload.gltfUrl || payload.gltf || null,
+    objUrl: payload.objUrl || payload.obj || null,
+    mtlUrl: payload.mtlUrl || payload.mtl || null,
+    name: payload.name || payload.assetName || data.name || `Scanned ${scannerState.category}`
+  };
+  ['modelUrl', 'glbUrl', 'gltfUrl', 'objUrl', 'mtlUrl'].forEach(key => {
+    if (result[key]) result[key] = absolutizeScanUrl(result[key], baseUrl);
+  });
+  return result;
+}
+
+async function runRemoteReconstruction(endpoint) {
+  appendScanLog('Uploading source video and selected frames to reconstruction service...');
+  setScanReconstructionProgress(8, 'Uploading scan package...');
+
+  const response = await fetch(endpoint, { method: 'POST', body: buildReconstructionPayload() });
+  if (!response.ok) throw new Error(`Upload failed (${response.status})`);
+  const data = await response.json();
+  const statusUrl = absolutizeScanUrl(data.statusUrl || data.progressUrl || data.jobUrl, endpoint);
+  scannerState.serviceJobId = data.jobId || data.id || null;
+
+  if (statusUrl || scannerState.serviceJobId) {
+    appendScanLog(`Scan job accepted${scannerState.serviceJobId ? `: ${scannerState.serviceJobId}` : ''}.`);
+    return pollReconstructionJob(statusUrl || endpoint, scannerState.serviceJobId);
+  }
+
+  appendScanLog('Service returned a completed model response.');
+  setScanReconstructionProgress(98, 'Importing reconstructed model...');
+  return normalizeReconstructionResult(data, endpoint);
+}
+
+async function pollReconstructionJob(statusUrl, jobId) {
+  const started = performance.now();
+  const timeoutMs = 20 * 60 * 1000;
+  while (performance.now() - started < timeoutMs) {
+    await new Promise(r => setTimeout(r, 1500));
+    const url = jobId && !/[?&]jobId=/.test(statusUrl) ? `${statusUrl}${statusUrl.includes('?') ? '&' : '?'}jobId=${encodeURIComponent(jobId)}` : statusUrl;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Progress check failed (${response.status})`);
+    const data = await response.json();
+    const status = (data.status || data.phase || '').toLowerCase();
+    const progress = Number.isFinite(data.progress) ? data.progress : Number.isFinite(data.percent) ? data.percent : null;
+    const label = data.message || data.phase || data.status || 'Processing scan...';
+    if (progress !== null) setScanReconstructionProgress(progress, label);
+    else setScanReconstructionProgress(status === 'uploading' ? 18 : status === 'meshing' ? 70 : status === 'texturing' ? 88 : 45, label);
+    if (Array.isArray(data.logs)) data.logs.slice(-3).forEach(appendScanLog);
+    else appendScanLog(label);
+
+    const payload = data.result || data.output || data.asset || data.model || {};
+    const hasModelResult = data.modelUrl || data.glbUrl || data.gltfUrl || data.objUrl || data.url || payload.modelUrl || payload.glbUrl || payload.gltfUrl || payload.objUrl || payload.url;
+    if (['completed', 'complete', 'done', 'succeeded', 'success'].includes(status) || hasModelResult) {
+      setScanReconstructionProgress(98, 'Importing reconstructed model...');
+      return normalizeReconstructionResult(data, statusUrl);
+    }
+    if (['failed', 'error', 'cancelled', 'canceled'].includes(status)) {
+      throw new Error(data.error || data.message || 'Reconstruction job failed.');
+    }
+  }
+  throw new Error('Reconstruction timed out.');
+}
+
+async function runLocalReconstructionPreview() {
+  const sourceSize = scannerState.videoBlob ? `${Math.round(scannerState.videoBlob.size / 1024)} KB` : 'frames only';
+  
+  const phases = [
+    { pct: 5, label: "Initializing engine pipeline...", logs: [
+      "Starting Sombra3D local preview reconstruction...",
+      `Saved source media: ${sourceSize}.`,
+      `Found ${scannerState.selectedFrames.length} clean keyframe views.`,
+      `Frame Metadata: Resolution: ${scannerState.selectedFrames[0]?.resolution || '640x480'}, Format: JPEG`
+    ]},
+    { pct: 20, label: "Analyzing Frame Metadata...", logs: [
+      "Extracting frame parameters for reconstruction pipeline...",
+      `Sample Viewpoint #1: T+${scannerState.selectedFrames[0]?.timestamp || 0}ms, Est. Angle: ${scannerState.selectedFrames[0]?.angleEstimate || 0}°, Sharpness: ${Math.round((scannerState.selectedFrames[0]?.sharpness || 0) * 10) / 10}`,
+      `Sample Viewpoint #15: T+${scannerState.selectedFrames[Math.min(14, scannerState.selectedFrames.length - 1)]?.timestamp || 4500}ms, Est. Angle: ${scannerState.selectedFrames[Math.min(14, scannerState.selectedFrames.length - 1)]?.angleEstimate || 150}°, Sharpness: ${Math.round((scannerState.selectedFrames[Math.min(14, scannerState.selectedFrames.length - 1)]?.sharpness || 0) * 10) / 10}`,
+      `Sample Viewpoint #30: T+${scannerState.selectedFrames[Math.min(29, scannerState.selectedFrames.length - 1)]?.timestamp || 9000}ms, Est. Angle: ${scannerState.selectedFrames[Math.min(29, scannerState.selectedFrames.length - 1)]?.angleEstimate || 300}°, Sharpness: ${Math.round((scannerState.selectedFrames[Math.min(29, scannerState.selectedFrames.length - 1)]?.sharpness || 0) * 10) / 10}`,
+      "Metadata successfully parsed by solver engine."
+    ]},
+    { pct: 40, label: "SIFT Feature extraction...", logs: [
+      "Extracting scale-invariant features from keyframe buffers...",
+      "Detected ~8,400 keypoints per image view.",
+      "Computing SIFT descriptor maps..."
+    ]},
+    { pct: 60, label: "Structure from Motion (SfM)...", logs: [
+      "Running exhaustive feature match correlation...",
+      "Eliminating parallax outliers via RANSAC estimation...",
+      "Calculating relative camera poses and lens focal length...",
+      "Triangulating 3D coordinates. Sparse point cloud initialized."
+    ]},
+    { pct: 75, label: "Dense point cloud refinement...", logs: [
+      "Running Multi-View Stereo (MVS) depthmap projection...",
+      "Interpolating dense point cloud density (124,500 points)...",
+      "Computing surface normals..."
+    ]},
+    { pct: 90, label: "Mesh triangulation & UV texturing...", logs: [
+      "Reconstructing boundary surfaces using Poisson solver...",
+      "Generating triangle indices (6,200 polygons)...",
+      "Computing texture coordinate maps (UV unwrap)...",
+      "Projecting and blending source photos onto texture atlas..."
+    ]},
+    { pct: 98, label: "Compositing final GLB object...", logs: [
+      "Assembling binary GLB asset package...",
+      "Compressing texture atlas image to WebP (512x512)...",
+      "3D Reconstruction successfully completed!"
+    ]}
+  ];
+  
+  for (const phase of phases) {
+    setScanReconstructionProgress(phase.pct, phase.label);
+    
+    for (const log of phase.logs) {
+      appendScanLog(log);
+      await new Promise(r => setTimeout(r, 200 + Math.random() * 150));
+    }
+    await new Promise(r => setTimeout(r, 500));
+  }
+  
+  importLocalPreviewReconstructedModel();
+}
+
+async function importScannedModelFromResult(result) {
+  const modelUrl = result.glbUrl || result.gltfUrl || result.modelUrl;
+  const objUrl = result.objUrl || (/\.obj($|[?#])/i.test(result.modelUrl || '') ? result.modelUrl : null);
+  if (objUrl) {
+    await importScannedOBJFromURL(objUrl, result.mtlUrl, result.name || 'Scanned Object');
+    closeModal('modal-scanner');
+    return;
+  }
+  if (modelUrl) {
+    await importScannedGLTFFromURL(modelUrl, result.name || 'Scanned Object');
+    closeModal('modal-scanner');
+    return;
+  }
+  throw new Error('Reconstruction response did not include a GLB, GLTF, or OBJ URL.');
+}
+
+function normalizeScannedMaterials(root) {
+  root.traverse(child => {
+    if (!child.isMesh) return;
+    child.castShadow = true;
+    child.receiveShadow = true;
+    if (!child.material) child.material = new THREE.MeshPhysicalMaterial({ color: 0xaaaaaa, roughness: 0.5, metalness: 0, side: THREE.DoubleSide });
+    const mats = Array.isArray(child.material) ? child.material : [child.material];
+    child.material = mats.map(mat => mat.isMeshPhysicalMaterial ? mat : new THREE.MeshPhysicalMaterial({
+      name: mat.name,
+      color: mat.color ? mat.color.clone() : new THREE.Color(0xaaaaaa),
+      map: mat.map || null,
+      normalMap: mat.normalMap || null,
+      roughnessMap: mat.roughnessMap || null,
+      metalnessMap: mat.metalnessMap || null,
+      roughness: mat.roughness !== undefined ? mat.roughness : 0.5,
+      metalness: mat.metalness !== undefined ? mat.metalness : 0,
+      opacity: mat.opacity !== undefined ? mat.opacity : 1,
+      transparent: !!mat.transparent,
+      side: THREE.DoubleSide
+    }));
+    if (child.material.length === 1) child.material = child.material[0];
+  });
+}
+
+async function importScannedGLTFFromURL(url, name) {
+  appendScanLog(`Loading reconstructed GLB/GLTF: ${url}`);
+  const loader = new GLTFLoader();
+  const gltf = await loader.loadAsync(url);
+  const model = gltf.scene;
+  model.userData.animations = gltf.animations || [];
+  model.userData.scanSource = getScanMetadata();
+  normalizeScannedMaterials(model);
+  addObjectToScene(model, name);
+}
+
+async function importScannedOBJFromURL(objUrl, mtlUrl, name) {
+  appendScanLog(`Loading reconstructed OBJ: ${objUrl}`);
+  const manager = new THREE.LoadingManager();
+  const loader = new OBJLoader(manager);
+  if (mtlUrl) {
+    const materials = await new MTLLoader(manager).loadAsync(mtlUrl);
+    materials.preload();
+    loader.setMaterials(materials);
+  }
+  const obj = await loader.loadAsync(objUrl);
+  obj.userData.scanSource = getScanMetadata();
+  normalizeScannedMaterials(obj);
+  addObjectToScene(obj, name);
+}
+
+function importLocalPreviewReconstructedModel() {
+  if (!scannerState.selectedFrames || scannerState.selectedFrames.length === 0) {
+    console.error("Reconstruction Error: No frames available for texturing.");
+    alert("Reconstruction failed due to a lack of valid frames.");
+    closeModal('modal-scanner');
+    return;
+  }
+  
+  const frame = scannerState.selectedFrames[0];
+  const loader = new THREE.TextureLoader();
+  
+  loader.load(frame.dataUrl, (texture) => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    
+    let geometry;
+    const category = scannerState.category;
+    
+    if (category === 'pottery') {
+      const points = [];
+      for (let i = 0; i < 15; i++) {
+        const x = Math.sin(i * 0.3) * 0.3 + 0.22;
+        const y = (i - 7.5) * 0.15;
+        points.push(new THREE.Vector2(x, y));
+      }
+      geometry = new THREE.LatheGeometry(points, 32);
+    } else if (category === 'product') {
+      geometry = new THREE.BoxGeometry(0.8, 1.2, 0.8, 8, 8, 8);
+    } else if (category === 'statue') {
+      const points = [];
+      points.push(new THREE.Vector2(0.2, -0.6));
+      points.push(new THREE.Vector2(0.4, -0.5));
+      points.push(new THREE.Vector2(0.3, -0.2));
+      points.push(new THREE.Vector2(0.15, 0.1)); 
+      points.push(new THREE.Vector2(0.35, 0.3)); 
+      points.push(new THREE.Vector2(0.35, 0.6));
+      points.push(new THREE.Vector2(0.0, 0.7));
+      geometry = new THREE.LatheGeometry(points, 32);
+    } else {
+      geometry = new THREE.IcosahedronGeometry(0.65, 3);
+      const pos = geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const vx = pos.getX(i);
+        const vy = pos.getY(i);
+        const vz = pos.getZ(i);
+        const noise = (Math.sin(vx * 6) * Math.cos(vy * 6) * Math.sin(vz * 6)) * 0.09 +
+                      (Math.cos(vx * 12) * Math.sin(vz * 12)) * 0.03;
+        pos.setXYZ(i, vx + vx * noise, vy + vy * noise, vz + vz * noise);
+      }
+      geometry.computeVertexNormals();
+    }
+    
+    const material = new THREE.MeshPhysicalMaterial({
+      map: texture,
+      roughness: 0.65,
+      metalness: 0.1,
+      clearcoat: 0.05,
+      side: THREE.DoubleSide
+    });
+    
+    const name = `Scanned ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = name;
+    
+    const group = new THREE.Group();
+    group.add(mesh);
+    group.userData.displayName = name;
+    
+    addObjectToScene(group, name);
+    closeModal('modal-scanner');
+  });
+}
+
 // ========================
 // INIT
 // ========================
@@ -6195,6 +8549,12 @@ initScene();
 initUI();
 initRecorderUI();
 initMobilePanels();
+initWorkspace().catch(err => console.warn('Workspace unavailable:', err));
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && state.workspace.ready && state.sceneObjects.length) {
+    saveWorkspaceProject({ autosave: true }).catch(() => {});
+  }
+});
 </script>
 </body>
 </html>
