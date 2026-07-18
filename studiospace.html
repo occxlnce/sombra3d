@@ -2268,6 +2268,83 @@
     border-color: var(--accent);
     color: var(--accent-light);
   }
+
+  /* ===== SOMBRA GLASS SYSTEM ===== */
+  .toolbar,
+  .left-panel,
+  .right-panel,
+  .toolbar-menu,
+  .modal {
+    background: linear-gradient(
+      145deg,
+      rgba(255,255,255,0.13),
+      rgba(19,19,22,0.68) 20%,
+      rgba(8,8,11,0.78) 78%,
+      rgba(255,255,255,0.07)
+    ) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+    backdrop-filter: blur(26px) saturate(1.2);
+    -webkit-backdrop-filter: blur(26px) saturate(1.2);
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.34),
+      inset 1px 0 2px rgba(255,255,255,0.1),
+      inset -1px 0 2px rgba(255,255,255,0.07),
+      0 18px 54px rgba(0,0,0,0.34);
+  }
+
+  .toolbar {
+    border-bottom: 1px solid rgba(255,255,255,0.13) !important;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.3),
+      0 12px 34px rgba(0,0,0,0.28);
+  }
+
+  .left-panel {
+    border-right: 1px solid rgba(255,255,255,0.13) !important;
+  }
+
+  .right-panel {
+    border-left: 1px solid rgba(255,255,255,0.13) !important;
+  }
+
+  .toolbar-menu {
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,0.32),
+      0 20px 48px rgba(0,0,0,0.42);
+  }
+
+  .toolbar-menu-item:hover,
+  .panel-tab:hover,
+  .scene-row:hover {
+    background: rgba(255,255,255,0.08) !important;
+  }
+
+  .panel-tab.active {
+    background: linear-gradient(180deg, rgba(255,60,0,0.14), rgba(255,255,255,0.03));
+  }
+
+  .modal-overlay {
+    background: rgba(3,3,5,0.28);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+
+  .modal {
+    border: 1px solid rgba(255,255,255,0.16) !important;
+    box-shadow:
+      inset 0 2px 2px rgba(255,255,255,0.38),
+      inset 2px 0 3px rgba(255,255,255,0.1),
+      inset -2px 0 3px rgba(255,255,255,0.08),
+      0 26px 80px rgba(0,0,0,0.48);
+  }
+
+  .panel-mobile-header,
+  .inspector-header,
+  .panel-tabs {
+    background: rgba(255,255,255,0.025);
+    border-color: rgba(255,255,255,0.1) !important;
+  }
 </style>
 </head>
 <body>
@@ -2385,7 +2462,6 @@
   <div class="toolbar-menu-item" id="menu-add-shape"><i class="fa-solid fa-cube"></i> Add Shape</div>
   <div class="toolbar-menu-item" id="menu-svg-to-3d"><i class="fa-solid fa-file-svg"></i> SVG → 3D</div>
   <div class="toolbar-menu-item" id="menu-image-to-3d"><i class="fa-solid fa-image"></i> Image → 3D</div>
-  <div class="toolbar-menu-item" id="menu-text-to-3d"><i class="fa-solid fa-wand-magic-sparkles"></i> Text → 3D</div>
 </div>
 <div class="toolbar-menu" id="camera-menu">
   <div class="toolbar-menu-heading">Camera</div>
@@ -2763,10 +2839,8 @@
 
       <!-- IMAGE EXTRUDE SECTION -->
       <div class="inspector-section" id="section-image3d" style="display:none">
-        <div class="inspector-section-title">AI Image / Text to 3D</div>
-        <div class="inspector-row"><span class="inspector-label">Mode</span><select class="inspector-select" id="img3d-mode"><option value="ai">Hunyuan3D AI</option><option value="relief">Local Textured Relief</option><option value="extrude">Local Solid Cutout</option><option value="heightmap">Local Height Map</option></select></div>
-        <div class="inspector-row"><span class="inspector-label">Prompt</span><textarea class="inspector-input" id="img3d-prompt" rows="3" placeholder="A stylized red robot with a clean white background" style="flex:1;resize:vertical;"></textarea></div>
-        <div class="inspector-row"><span class="inspector-label">Texture</span><div class="toggle-wrap"><div class="toggle on" id="img3d-textured"><div class="toggle-knob"></div></div></div></div>
+        <div class="inspector-section-title">Image to 3D</div>
+        <div class="inspector-row"><span class="inspector-label">Mode</span><select class="inspector-select" id="img3d-mode"><option value="relief">Textured Relief</option><option value="extrude">Solid Cutout</option><option value="heightmap">Height Map</option></select></div>
         <div class="inspector-row"><span class="inspector-label">Background</span><select class="inspector-select" id="img3d-bg"><option value="auto">Auto Remove Center Object</option><option value="alpha">Use Alpha</option></select></div>
         <div class="inspector-row"><span class="inspector-label">Threshold</span><input type="range" class="inspector-slider" id="img3d-threshold" min="0" max="255" step="1" value="128"><span class="slider-value" id="val-img3d-threshold">128</span></div>
         <div class="inspector-row"><span class="inspector-label">Depth</span><input type="range" class="inspector-slider" id="img3d-depth" min="0.1" max="20" step="0.1" value="3"><span class="slider-value" id="val-img3d-depth">3.0</span></div>
@@ -3187,7 +3261,7 @@ const state = {
   svgGroup: null, svgShapes: [],
   svgParams: { depth: 5, bevel: 0.5, bevelSegs: 3, curveDetail: 12, glow: true },
   img3dMesh: null, img3dData: null, img3dFile: null, img3dDataUrl: null,
-  img3dParams: { mode: 'ai', threshold: 128, depth: 3, resolution: 192, smooth: 2, bgRemoval: 'auto', textured: true },
+  img3dParams: { mode: 'relief', threshold: 128, depth: 3, resolution: 192, smooth: 2, bgRemoval: 'auto', textured: true },
   importContext: { files: new Map(), urls: new Map() },
   workspace: { db: null, selectedId: null, currentProjectId: null, currentProjectName: 'Untitled Sombra3D Project', autosaveTimer: null, lastAutosaveAt: 0, ready: false },
   clock: new THREE.Clock(), frameCount: 0, fpsTime: 0,
@@ -5353,30 +5427,8 @@ function syncImage3DControls() {
 }
 
 async function generateImage3D() {
-  const prompt = document.getElementById('img3d-prompt')?.value.trim() || '';
-  if (state.img3dParams.mode === 'ai') {
-    if (!state.img3dData && !prompt) {
-      setImage3DStatus('Upload an image or enter a text prompt.', 'error');
-      return;
-    }
-    const button = document.getElementById('img3d-regenerate');
-    button.disabled = true;
-    setImage3DStatus('Generating with Hunyuan3D. This can take several minutes...', 'active');
-    try {
-      const result = await runImageTo3DService('/api/image-to-3d');
-      if (state.img3dMesh) { removeObject(state.img3dMesh); state.img3dMesh = null; }
-      await importImage3DModelFromResult(result);
-      setImage3DStatus('Hunyuan3D asset imported into the scene.', 'muted');
-    } catch (error) {
-      console.error(error);
-      setImage3DStatus(`AI generation failed: ${error.message}`, 'error');
-    } finally {
-      button.disabled = false;
-    }
-    return;
-  }
   if (!state.img3dData) {
-    setImage3DStatus('Upload an image to use a local mesh mode.', 'error');
+    setImage3DStatus('Upload an image to generate a local 3D mesh.', 'error');
     return;
   }
   if (state.img3dMesh) { removeObject(state.img3dMesh); state.img3dMesh = null; }
@@ -6014,12 +6066,12 @@ function buildImage3DPayload() {
 
 async function runImageTo3DService(endpoint) {
   if (!/^https?:$/.test(window.location.protocol)) {
-    throw new Error('Image-to-3D requires the Sombra3D server. Run "python server.py", then open http://127.0.0.1:5173.');
+    throw new Error('Image-to-3D requires the Sombra3D server. Run "python server.py", then open http://127.0.0.1:7000.');
   }
   const response = await fetch(endpoint, { method: 'POST', body: buildImage3DPayload() });
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('application/json')) {
-    throw new Error('The Image-to-3D API is unavailable. Start server.py and reload this page through http://127.0.0.1:5173.');
+    throw new Error('The Image-to-3D API is unavailable. Start server.py and reload this page through http://127.0.0.1:7000.');
   }
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || `Generation failed (${response.status})`);
@@ -6852,7 +6904,10 @@ function initUI() {
   document.getElementById('welcome-import').addEventListener('click', () => openModal('modal-import'));
   document.getElementById('btn-add-prim').addEventListener('click', () => openModal('modal-primitives'));
   document.getElementById('btn-svg-to-3d').addEventListener('click', () => document.getElementById('svg-input').click());
-  document.getElementById('btn-img-to-3d').addEventListener('click', () => document.getElementById('img-input').click());
+  document.getElementById('btn-img-to-3d').addEventListener('click', () => {
+    state.img3dParams.mode = 'relief';
+    document.getElementById('img-input').click();
+  });
   document.getElementById('welcome-demo').addEventListener('click', loadDemoScene);
 
   document.querySelectorAll('[data-transform-mode]').forEach(btn => {
@@ -6948,15 +7003,6 @@ function initUI() {
   document.getElementById('menu-add-shape').addEventListener('click', function(){ document.getElementById('btn-add-prim').click(); closeAllMenus(); });
   document.getElementById('menu-svg-to-3d').addEventListener('click', function(){ document.getElementById('btn-svg-to-3d').click(); closeAllMenus(); });
   document.getElementById('menu-image-to-3d').addEventListener('click', function(){ document.getElementById('btn-img-to-3d').click(); closeAllMenus(); });
-  document.getElementById('menu-text-to-3d').addEventListener('click', function(){
-    state.img3dParams.mode = 'ai';
-    document.getElementById('section-image3d').style.display = '';
-    document.getElementById('right-panel').classList.remove('desktop-collapsed');
-    syncImage3DControls();
-    setImage3DStatus('Enter a prompt, then generate a textured 3D asset.', 'active');
-    closeAllMenus();
-    setTimeout(() => document.getElementById('img3d-prompt').focus(), 0);
-  });
   document.getElementById('menu-add-camera').addEventListener('click', function(){ document.getElementById('btn-add-camera').click(); closeAllMenus(); });
   document.getElementById('menu-templates').addEventListener('click', function(){ document.getElementById('btn-camera-templates').click(); closeAllMenus(); });
   document.getElementById('menu-look-camera').addEventListener('click', function(){ document.getElementById('btn-look-camera').click(); closeAllMenus(); });
@@ -7127,10 +7173,7 @@ function initUI() {
   syncImage3DControls();
   document.getElementById('img3d-mode').addEventListener('change', (e) => {
     state.img3dParams.mode = e.target.value;
-    setImage3DStatus(e.target.value === 'ai' ? 'Generate with Hunyuan3D using the image, prompt, or both.' : 'Regenerate to apply the local image mode.', 'active');
-  });
-  document.getElementById('img3d-textured').addEventListener('click', (e) => {
-    state.img3dParams.textured = e.currentTarget.classList.toggle('on');
+    setImage3DStatus('Regenerate to apply the selected local image mode.', 'active');
   });
   document.getElementById('img3d-bg').addEventListener('change', (e) => { state.img3dParams.bgRemoval = e.target.value; });
   const img3dSliders = { 'img3d-threshold':(v)=>{state.img3dParams.threshold=v;document.getElementById('val-img3d-threshold').textContent=v;}, 'img3d-depth':(v)=>{state.img3dParams.depth=v;document.getElementById('val-img3d-depth').textContent=v.toFixed(1);}, 'img3d-res':(v)=>{state.img3dParams.resolution=v;document.getElementById('val-img3d-res').textContent=v;}, 'img3d-smooth':(v)=>{state.img3dParams.smooth=v;document.getElementById('val-img3d-smooth').textContent=v;} };
