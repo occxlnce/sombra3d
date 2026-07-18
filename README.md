@@ -11,7 +11,7 @@ python -m pip install -r requirements.txt
 python server.py
 ```
 
-Open `http://127.0.0.1:5173`. Serving the site through `server.py` is required for Hunyuan3D generation.
+Open `http://127.0.0.1:7000`. Serving the site through `server.py` is required for Hunyuan3D generation.
 
 Set `HF_TOKEN` in your environment when the Hugging Face Space requires authentication or you need authenticated access. Never add the token to browser code.
 
