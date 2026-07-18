@@ -4,15 +4,31 @@ Created with [Omma](https://omma.build)
 
 ## Setup
 
-Open `index.html` in your browser, or:
+Install the Python dependencies and run the local application server:
 
 ```bash
-npx serve .
+python -m pip install -r requirements.txt
+python server.py
 ```
+
+Open `http://127.0.0.1:5173`. Serving the site through `server.py` is required for Hunyuan3D generation.
+
+Set `HF_TOKEN` in your environment when the Hugging Face Space requires authentication or you need authenticated access. Never add the token to browser code.
 
 ## Image to 3D
 
-Image import now uses local foreground extraction by default. The importer samples the image border as background, removes edge-connected background, biases selection toward the centered object, and builds a textured relief/cutout from the remaining foreground.
+Image and text generation uses the `tencent/Hunyuan3D-2` Hugging Face Space through the local `/api/image-to-3d` proxy. Choose **Create → Image → 3D** to upload an image, or **Create → Text → 3D** to start from a prompt. The generated GLB is imported directly into the current scene.
+
+The Hunyuan integration supports:
+
+- Image-to-3D, text-to-3D, or a prompt combined with an image.
+- Textured generation through `/generation_all`.
+- Geometry-only generation through `/shape_generation`.
+- Automatic import of the returned GLB into the Studio scene.
+
+Hugging Face Zero GPU availability and queue times can vary. For production use, point the same proxy contract at a dedicated Hunyuan3D deployment.
+
+Local foreground extraction remains available through the Local Textured Relief, Solid Cutout, and Height Map modes.
 
 For best results, upload images where the object is centered and clearly separated from the background.
 
